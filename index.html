@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WLC InternTrack - Mobile Internship System</title>
+    <!-- Inter Font & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --navy-green: #0E3B2E;
+            --gold-yellow: #F5C518;
+            --deep-red: #B72424;
+            --bg-white: #FFFFFF;
+            --bg-light: #F5F7F6;
+            --text-dark: #333333;
+            --success-green: #2E7D32;
+            --warning-orange: #F57C00;
+            --border-color: #CBD5E1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #0F172A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .mobile-frame {
+            width: 100%;
+            max-width: 420px;
+            height: 90vh;
+            max-height: 880px;
+            background-color: var(--bg-white);
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 4px solid #1E293B;
+        }
+
+        /* Screen Routing */
+        .screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* App Branding */
+        .app-header {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 16px;
+        }
+
+        .app-logo {
+            width: 60px;
+            height: 60px;
+            background-color: var(--navy-green);
+            color: var(--gold-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 8px auto;
+            border: 3px solid var(--gold-yellow);
+        }
+
+        .app-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--navy-green);
+            text-transform: uppercase;
+        }
+
+        .app-subtitle {
+            font-size: 12px;
+            color: #64748B;
+        }
+
+        /* Toast Notification System */
+        .toast-container {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            z-index: 1000;
+        }
+
+        .toast {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .toast-error { background-color: #FEE2E2; color: var(--deep-red); border: 1px solid #FCA5A5; }
+        .toast-success { background-color: #DCFCE7; color: var(--success-green); border: 1px solid #86EFAC; }
+        .toast-warning { background-color: #FEF3C7; color: var(--warning-orange); border: 1px solid #FDE047; }
+
+        /* Form Styling */
+        .form-group { margin-bottom: 12px; }
+        .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            background-color: var(--bg-light);
+            outline: none;
+        }
+        .form-input:focus { border-color: var(--navy-green); background-color: #FFF; }
+        .toggle-pw { position: absolute; right: 12px; cursor: pointer; color: #64748B; font-size: 14px; }
+
+        /* Password Rules Visualizer */
+        .pw-rules { font-size: 11px; color: #64748B; margin-top: 4px; }
+        .rule-item { display: inline-block; margin-right: 6px; }
+        .rule-item.valid { color: var(--success-green); font-weight: 600; }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-primary { background-color: var(--navy-green); color: #FFF; }
+        .btn-danger { background-color: var(--deep-red); color: #FFF; }
+        .btn-success { background-color: var(--success-green); color: #FFF; }
+
+        /* Quick Demo Buttons */
+        .demo-section {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px dashed var(--border-color);
+        }
+        .demo-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .demo-btn-group {
+            display: flex;
+            gap: 6px;
+        }
+        .btn-demo {
+            flex: 1;
+            padding: 8px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            border: 1px solid var(--navy-green);
+            background-color: var(--bg-light);
+            color: var(--navy-green);
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-demo:hover {
+            background-color: var(--navy-green);
+            color: var(--gold-yellow);
+        }
+
+        .auth-link { text-align: center; margin-top: 12px; font-size: 12px; color: #64748B; }
+        .auth-link a { color: var(--navy-green); font-weight: 600; text-decoration: none; }
+
+        /* Dashboards */
+        .dash-nav {
+            background-color: var(--navy-green);
+            color: #FFF;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+        .dash-user-name { font-size: 16px; font-weight: 700; color: var(--gold-yellow); }
+        .dash-user-role { font-size: 12px; opacity: 0.9; }
+
+        .card {
+            background-color: var(--bg-light);
+            border-left: 4px solid var(--navy-green);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .card-title { font-size: 11px; font-weight: 600; color: #64748B; text-transform: uppercase; }
+        .card-value { font-size: 15px; font-weight: 700; color: var(--text-dark); margin-top: 2px; }
+
+        /* Badge Statuses */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-pending { background-color: #FEF3C7; color: #B45309; }
+        .badge-verified { background-color: #E0F2FE; color: #0369A1; }
+        .badge-approved { background-color: #DCFCE7; color: #15803D; }
+
+        .log-item {
+            background: #FFF;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+        .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .log-desc { font-size: 12px; color: var(--text-dark); margin-bottom: 6px; }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 500;
+        }
+        .modal-card {
+            background-color: #FFF;
+            border-radius: 14px;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-frame">
+        
+        <!-- TOAST NOTIFICATION CONTAINER -->
+        <div class="toast-container">
+            <div id="toastBox" class="toast"></div>
+        </div>
+
+        <!-- 1. LOGIN SCREEN -->
+        <div id="loginScreen" class="screen active">
+            <div class="app-header">
+                <div class="app-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="app-title">WLC InternTrack</div>
+                <div class="app-subtitle">Western Leyte College of Ormoc</div>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Username or Email</label>
+                    <input type="text" id="loginUsername" class="form-input" placeholder="e.g. student_demo" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" required>
+                        <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('loginPassword', this)"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="loginBtn">Sign In</button>
+            </form>
+
+            <!-- ONE-TAP DEMO LOGIN BUTTONS -->
+            <div class="demo-section">
+                <div class="demo-title"><i class="fa-solid fa-bolt"></i> Quick Demo Login</div>
+                <div class="demo-btn-group">
+                    <button class="btn-demo" onclick="quickLogin('student_demo', 'P@ssword123!')">Student</button>
+                    <button class="btn-demo" onclick="quickLogin('supervisor_demo', 'P@ssword123!')">Supervisor</button>
+                    <button class="btn-demo" onclick="quickLogin('faculty_demo', 'P@ssword123!')">Faculty</button>
+                </div>
+            </div>
+
+            <div class="auth-link">
+                Don't have an account? <a href="#" onclick="switchScreen('registerScreen')">Create Account</a>
+            </div>
+        </div>
+
+        <!-- 2. REGISTRATION SCREEN (WITH ROLE SELECTION) -->
+        <div id="registerScreen" class="screen">
+            <div class="app-header">
+                <div class="app-title" style="font-size: 16px;">Create Account</div>
+                <div class="app-subtitle">Join the WLC OJT System</div>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="regFullName" class="form-input" placeholder="e.g. Recca Maglasang" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="regUsername" class="form-input" placeholder="Choose a username" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="regEmail" class="form-input" placeholder="name@wlc.edu.ph" required>
+                </div>
+
+                <!-- ROLE SELECTION FIELD -->
+                <div class="form-group">
+                    <label class="form-label">Select System Role</label>
+                    <select id="regRole" class="form-input" required>
+                        <option value="Student">Student Intern</option>
+                        <option value="Supervisor">Agency Supervisor</option>
+                        <option value="Faculty">Faculty / Coordinator</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="regPassword" class="form-input" onkeyup="checkPasswordComplexity(this.value)" placeholder="P@ssword123!" required>
+                        <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('regPassword', this)"></i>
+                    </div>
+                    <div class="pw-rules">
+                        <span id="ruleLength" class="rule-item">&bull; 8+ chars</span>
+                        <span id="ruleUpper" class="rule-item">&bull; Upper</span>
+                        <span id="ruleLower" class="rule-item">&bull; Lower</span>
+                        <span id="ruleNum" class="rule-item">&bull; Number</span>
+                        <span id="ruleSpecial" class="rule-item">&bull; Symbol</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="regConfirmPassword" class="form-input" placeholder="Re-enter password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Register Account</button>
+            </form>
+
+            <div class="auth-link">
+                Already registered? <a href="#" onclick="switchScreen('loginScreen')">Back to Login</a>
+            </div>
+        </div>
+
+        <!-- 3. STUDENT DASHBOARD SCREEN -->
+        <div id="studentDashboard" class="screen">
+            <div class="dash-nav">
+                <div class="dash-user-name" id="stdName">Student Name</div>
+                <div class="dash-user-role">BSIT Student Intern &bull; WLC Ormoc</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">OJT Progress</div>
+                <div class="card-value" id="stdHoursDisplay">0.00 / 486 Hours</div>
+            </div>
+
+            <div class="card" style="border-left-color: var(--gold-yellow);">
+                <div class="card-title">New Daily Task Entry</div>
+                <form id="taskForm" onsubmit="submitDailyLog(event)" style="margin-top: 6px;">
+                    <input type="number" id="logHours" class="form-input" placeholder="Hours (e.g., 8)" step="0.5" required style="margin-bottom: 6px;">
+                    <textarea id="logTask" class="form-input" placeholder="Task description..." required style="margin-bottom: 6px; height: 50px;"></textarea>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px;">Submit OJT Log</button>
+                </form>
+            </div>
+
+            <div style="font-size: 12px; font-weight: 700; color: var(--navy-green); margin: 6px 0 4px 0;">My Recent Log Entries</div>
+            <div id="studentLogList" style="flex: 1; overflow-y: auto;"></div>
+
+            <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;">Logout</button>
+        </div>
+
+        <!-- 4. SUPERVISOR DASHBOARD SCREEN -->
+        <div id="supervisorDashboard" class="screen">
+            <div class="dash-nav">
+                <div class="dash-user-name" id="supName">Supervisor Name</div>
+                <div class="dash-user-role">Partner Agency Supervisor</div>
+            </div>
+
+            <div style="font-size: 12px; font-weight: 700; color: var(--navy-green); margin-bottom: 6px;">Pending Student Verification Requests</div>
+            <div id="supervisorLogList" style="flex: 1; overflow-y: auto;"></div>
+
+            <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;">Logout</button>
+        </div>
+
+        <!-- 5. FACULTY DASHBOARD SCREEN -->
+        <div id="facultyDashboard" class="screen">
+            <div class="dash-nav">
+                <div class="dash-user-name" id="facName">Faculty Coordinator</div>
+                <div class="dash-user-role">WLC OJT Adviser & Admin</div>
+            </div>
+
+            <div style="font-size: 12px; font-weight: 700; color: var(--navy-green); margin-bottom: 6px;">Verified Logs Awaiting Final Approval</div>
+            <div id="facultyLogList" style="max-height: 200px; overflow-y: auto; margin-bottom: 10px;"></div>
+
+            <div style="font-size: 12px; font-weight: 700; color: var(--navy-green); margin-bottom: 6px;"><i class="fa-solid fa-shield-halved"></i> IAS Audit Log Trail</div>
+            <div id="auditLogList" style="flex: 1; overflow-y: auto; background: var(--bg-light); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 10px;"></div>
+
+            <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;">Logout</button>
+        </div>
+
+        <!-- 6. LOGOUT CONFIRMATION MODAL -->
+        <div id="logoutModal" class="modal-overlay">
+            <div class="modal-card">
+                <div style="font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px;">Confirm Logout</div>
+                <p style="font-size: 12px; color: #64748B; margin-bottom: 14px;">Are you sure you want to logout/sign out?</p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-primary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-danger" onclick="executeLogout()">Yes/Confirm</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // SUPABASE CONFIG
+        const SUPABASE_URL = "https://ugucenfgekasazeguqpn.supabase.co/rest/v1";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndWNlbmZnZWthc2F6ZWd1cXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4NzY4MzgsImV4cCI6MjEwNzQ1MjgzOH0.dZp1nmNkUgZt3m7uJlCvn7Q6LzABH3bpY6tRIBweGqM";
+
+        let currentUser = null;
+        let failedAttempts = 0;
+        let lockoutTimer = null;
+
+        const headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+        };
+
+        function showToast(message, type = 'error') {
+            const toast = document.getElementById('toastBox');
+            toast.className = `toast toast-${type}`;
+            toast.innerText = message;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3500);
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function togglePassword(inputId, icon) {
+            const el = document.getElementById(inputId);
+            if (el.type === 'password') {
+                el.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                el.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function checkPasswordComplexity(pw) {
+            const rules = {
+                Length: pw.length >= 8,
+                Upper: /[A-Z]/.test(pw),
+                Lower: /[a-z]/.test(pw),
+                Num: /[0-9]/.test(pw),
+                Special: /[^A-Za-z0-9]/.test(pw)
+            };
+            for (let r in rules) {
+                const el = document.getElementById(`rule${r}`);
+                if (rules[r]) el.classList.add('valid');
+                else el.classList.remove('valid');
+            }
+            return Object.values(rules).every(Boolean);
+        }
+
+        async function logActivity(action, details) {
+            try {
+                await fetch(`${SUPABASE_URL}/audit_logs`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({
+                        user_id: currentUser ? currentUser.id : null,
+                        username: currentUser ? currentUser.username : 'Guest',
+                        action: action,
+                        details: details
+                    })
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        // ONE-TAP QUICK DEMO LOGIN
+        function quickLogin(username, password) {
+            document.getElementById('loginUsername').value = username;
+            document.getElementById('loginPassword').value = password;
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (lockoutTimer) {
+                showToast("Account locked due to multiple failed attempts.", "warning");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/users?username=eq.${encodeURIComponent(username)}`, { headers });
+                const users = await res.json();
+
+                if (users.length === 0 || users[0].password !== password) {
+                    failedAttempts++;
+                    if (failedAttempts >= 3) {
+                        showToast("Too many failed attempts. Locked for 30s.", "warning");
+                        lockoutTimer = setTimeout(() => { lockoutTimer = null; failedAttempts = 0; }, 30000);
+                    } else {
+                        showToast("Incorrect username or password.", "error");
+                    }
+                    return;
+                }
+
+                failedAttempts = 0;
+                currentUser = users[0];
+                await logActivity("USER_LOGIN", `User ${currentUser.username} logged in (${currentUser.role}).`);
+                showToast(`Welcome back, ${currentUser.full_name}!`, "success");
+                document.getElementById('loginForm').reset();
+                routeUserDashboard();
+
+            } catch (err) {
+                showToast("Connection to Supabase failed.", "error");
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const full_name = document.getElementById('regFullName').value.trim();
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const role = document.getElementById('regRole').value;
+            const password = document.getElementById('regPassword').value.trim();
+            const confirmPw = document.getElementById('regConfirmPassword').value.trim();
+
+            if (password !== confirmPw) {
+                showToast("Passwords do not match.", "error");
+                return;
+            }
+
+            if (!checkPasswordComplexity(password)) {
+                showToast("Password does not meet complexity rules.", "error");
+                return;
+            }
+
+            try {
+                const userRes = await fetch(`${SUPABASE_URL}/users`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ username, password, full_name, email, role })
+                });
+
+                if (!userRes.ok) {
+                    showToast("Username or email already exists.", "error");
+                    return;
+                }
+
+                const newUser = (await userRes.json())[0];
+
+                if (role === 'Student') {
+                    const stdNum = "WLC-2026-" + Math.floor(1000 + Math.random() * 9000);
+                    await fetch(`${SUPABASE_URL}/student_profiles`, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify({ user_id: newUser.id, student_id_number: stdNum })
+                    });
+                }
+
+                await logActivity("USER_REGISTER", `Registered: ${username} (${role}).`);
+                showToast("Account created successfully!", "success");
+                document.getElementById('registerForm').reset();
+                setTimeout(() => switchScreen('loginScreen'), 1200);
+
+            } catch (err) {
+                showToast("Registration failed.", "error");
+            }
+        }
+
+        function routeUserDashboard() {
+            if (currentUser.role === 'Student') {
+                document.getElementById('stdName').innerText = currentUser.full_name;
+                switchScreen('studentDashboard');
+                loadStudentDashboard();
+            } else if (currentUser.role === 'Supervisor') {
+                document.getElementById('supName').innerText = currentUser.full_name;
+                switchScreen('supervisorDashboard');
+                loadSupervisorDashboard();
+            } else if (currentUser.role === 'Faculty') {
+                document.getElementById('facName').innerText = currentUser.full_name;
+                switchScreen('facultyDashboard');
+                loadFacultyDashboard();
+            }
+        }
+
+        async function loadStudentDashboard() {
+            const profRes = await fetch(`${SUPABASE_URL}/student_profiles?user_id=eq.${currentUser.id}`, { headers });
+            const profiles = await profRes.json();
+            if (profiles.length > 0) {
+                document.getElementById('stdHoursDisplay').innerText = `${profiles[0].rendered_hours} / ${profiles[0].required_hours} Hours`;
+            }
+
+            const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?student_id=eq.${currentUser.id}&order=created_at.desc`, { headers });
+            const logs = await logsRes.json();
+
+            const list = document.getElementById('studentLogList');
+            list.innerHTML = logs.length === 0 ? '<p style="font-size:12px; color:#64748B;">No daily logs submitted yet.</p>' : '';
+
+            logs.forEach(log => {
+                list.innerHTML += `
+                    <div class="log-item">
+                        <div class="log-header">
+                            <span style="font-size:11px; font-weight:700;">${log.log_date} (${log.hours_rendered} hrs)</span>
+                            <div>
+                                <span class="badge ${getBadgeClass(log.supervisor_status)}">Sup: ${log.supervisor_status}</span>
+                                <span class="badge ${getBadgeClass(log.faculty_status)}">Fac: ${log.faculty_status}</span>
+                            </div>
+                        </div>
+                        <div class="log-desc">${log.task_description}</div>
+                    </div>
+                `;
+            });
+        }
+
+        async function submitDailyLog(e) {
+            e.preventDefault();
+            const hours = parseFloat(document.getElementById('logHours').value);
+            const task = document.getElementById('logTask').value.trim();
+
+            await fetch(`${SUPABASE_URL}/ojt_logs`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ student_id: currentUser.id, hours_rendered: hours, task_description: task })
+            });
+
+            await logActivity("OJT_LOG_SUBMIT", `Student ${currentUser.username} logged ${hours} hrs.`);
+            showToast("Log submitted to Supervisor!", "success");
+            document.getElementById('taskForm').reset();
+            loadStudentDashboard();
+        }
+
+        async function loadSupervisorDashboard() {
+            const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?supervisor_status=eq.Pending&select=*,users(full_name)&order=created_at.desc`, { headers });
+            const logs = await logsRes.json();
+
+            const list = document.getElementById('supervisorLogList');
+            list.innerHTML = logs.length === 0 ? '<p style="font-size:12px; color:#64748B;">No pending student logs.</p>' : '';
+
+            logs.forEach(log => {
+                const studentName = log.users ? log.users.full_name : 'Student';
+                list.innerHTML += `
+                    <div class="log-item">
+                        <div class="log-header">
+                            <span style="font-size:12px; font-weight:700; color:var(--navy-green);">${studentName}</span>
+                            <span class="badge badge-pending">${log.hours_rendered} Hours</span>
+                        </div>
+                        <div class="log-desc">${log.task_description}</div>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn btn-success" style="padding:5px; font-size:11px;" onclick="verifyLog('${log.id}', 'Verified')">Verify Entry</button>
+                            <button class="btn btn-danger" style="padding:5px; font-size:11px;" onclick="verifyLog('${log.id}', 'Rejected')">Reject</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function verifyLog(logId, status) {
+            await fetch(`${SUPABASE_URL}/ojt_logs?id=eq.${logId}`, {
+                method: 'PATCH',
+                headers,
+                body: JSON.stringify({ supervisor_status: status })
+            });
+
+            await logActivity("SUPERVISOR_VERIFY", `Verified log ID ${logId} as ${status}.`);
+            showToast(`Log entry marked as ${status}.`, "success");
+            loadSupervisorDashboard();
+        }
+
+        async function loadFacultyDashboard() {
+            const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?supervisor_status=eq.Verified&faculty_status=eq.Pending&select=*,users(full_name)&order=created_at.desc`, { headers });
+            const logs = await logsRes.json();
+
+            const list = document.getElementById('facultyLogList');
+            list.innerHTML = logs.length === 0 ? '<p style="font-size:12px; color:#64748B;">No verified logs awaiting approval.</p>' : '';
+
+            logs.forEach(log => {
+                const studentName = log.users ? log.users.full_name : 'Student';
+                list.innerHTML += `
+                    <div class="log-item">
+                        <div class="log-header">
+                            <span style="font-size:12px; font-weight:700; color:var(--navy-green);">${studentName}</span>
+                            <span class="badge badge-verified">${log.hours_rendered} Hrs Verified</span>
+                        </div>
+                        <div class="log-desc">${log.task_description}</div>
+                        <button class="btn btn-primary" style="padding:5px; font-size:11px;" onclick="approveLog('${log.id}', '${log.student_id}', ${log.hours_rendered})">Grant Final Approval</button>
+                    </div>
+                `;
+            });
+
+            const auditRes = await fetch(`${SUPABASE_URL}/audit_logs?order=created_at.desc&limit=15`, { headers });
+            const audits = await auditRes.json();
+            const auditBox = document.getElementById('auditLogList');
+            auditBox.innerHTML = '';
+            audits.forEach(a => {
+                auditBox.innerHTML += `<div style="margin-bottom:3px; border-bottom:1px solid #E2E8F0;">
+                    <strong>[${a.action}]</strong> ${a.username}: ${a.details}
+                </div>`;
+            });
+        }
+
+        async function approveLog(logId, studentId, hours) {
+            await fetch(`${SUPABASE_URL}/ojt_logs?id=eq.${logId}`, {
+                method: 'PATCH',
+                headers,
+                body: JSON.stringify({ faculty_status: 'Approved' })
+            });
+
+            const profRes = await fetch(`${SUPABASE_URL}/student_profiles?user_id=eq.${studentId}`, { headers });
+            const profiles = await profRes.json();
+            if (profiles.length > 0) {
+                const newRendered = parseFloat(profiles[0].rendered_hours) + parseFloat(hours);
+                await fetch(`${SUPABASE_URL}/student_profiles?id=eq.${profiles[0].id}`, {
+                    method: 'PATCH',
+                    headers,
+                    body: JSON.stringify({ rendered_hours: newRendered })
+                });
+            }
+
+            await logActivity("FACULTY_APPROVE", `Approved log ID ${logId} (${hours} hrs).`);
+            showToast("Log officially approved!", "success");
+            loadFacultyDashboard();
+        }
+
+        function promptLogout() { document.getElementById('logoutModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('logoutModal').style.display = 'none'; }
+        async function executeLogout() {
+            closeModal();
+            if (currentUser) {
+                await logActivity("USER_LOGOUT", `User ${currentUser.username} logged out.`);
+            }
+            currentUser = null;
+            switchScreen('loginScreen');
+            showToast("Logged out successfully.", "success");
+        }
+
+        function getBadgeClass(status) {
+            if (status === 'Pending') return 'badge-pending';
+            if (status === 'Verified') return 'badge-verified';
+            if (status === 'Approved') return 'badge-approved';
+            return '';
+        }
+    </script>
+</body>
+</html>
