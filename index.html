@@ -29,7 +29,6 @@
             --shadow-soft: 0 12px 32px -8px rgba(6, 51, 37, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
         }
 
-        /* Dark Mode Theme Overrides */
         body.dark-mode {
             --bg-card: #1e293b;
             --bg-input: #0f172a;
@@ -42,7 +41,7 @@
             background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
             border-color: #334155;
         }
-        body.dark-mode .log-item, body.dark-mode .audit-card, body.dark-mode .tab-bar {
+        body.dark-mode .log-item, body.dark-mode .audit-card, body.dark-mode .user-card, body.dark-mode .tab-bar {
             background: #1e293b;
             border-color: #334155;
         }
@@ -98,7 +97,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Top Notch Bar with Theme Toggle */
         .phone-notch-bar {
             height: 32px;
             background-color: var(--emerald-primary);
@@ -116,7 +114,6 @@
         .theme-toggle-btn { cursor: pointer; color: var(--gold-bright); font-size: 12px; transition: transform 0.2s; }
         .theme-toggle-btn:hover { transform: scale(1.15); }
 
-        /* Animated Screen Container */
         .screen {
             display: none;
             flex: 1;
@@ -153,8 +150,7 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        /* Branding Header */
-        .app-header { text-align: center; margin-top: 6px; margin-bottom: 16px; }
+        .app-header { text-align: center; margin-top: 6px; margin-bottom: 14px; }
         .logo-wrapper { position: relative; width: 72px; height: 72px; margin: 0 auto 10px auto; }
         .app-logo {
             width: 100%; height: 100%;
@@ -168,7 +164,6 @@
         body.dark-mode .app-title { color: var(--gold-bright); }
         .app-subtitle { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
-        /* Toast Popup */
         .toast-container { position: absolute; top: 38px; left: 50%; transform: translateX(-50%); width: 88%; z-index: 1000; }
         .toast {
             padding: 12px 16px; border-radius: 16px; font-size: 12px; font-weight: 700; display: none;
@@ -180,23 +175,21 @@
         .toast-warning { background: rgba(254, 243, 199, 0.95); color: #b45309; border: 1px solid #fde047; }
         @keyframes toastPop { from { opacity: 0; transform: translateY(-20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* Tab Bar Navigation */
         .tab-bar {
             display: flex; background: #f1f5f9; border-radius: 16px; padding: 4px;
             margin-bottom: 12px; border: 1px solid var(--border-color); gap: 4px; flex-shrink: 0;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.04); overflow-x: auto;
         }
         .tab-btn {
-            flex: 1; padding: 8px 4px; border: none; background: transparent; font-size: 11px;
+            flex: 1; padding: 8px 6px; border: none; background: transparent; font-size: 10px;
             font-weight: 700; color: var(--text-muted); border-radius: 12px; cursor: pointer;
-            transition: all 0.25s ease; text-align: center;
+            transition: all 0.25s ease; text-align: center; white-space: nowrap;
         }
         .tab-btn.active {
             background: linear-gradient(135deg, var(--emerald-primary) 0%, var(--emerald-surface) 100%);
             color: var(--gold-bright); box-shadow: 0 4px 14px var(--emerald-glow);
         }
 
-        /* Analytics Quick Stat Cards */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
         .stat-card {
             background: var(--bg-card); border-radius: 14px; padding: 10px 12px;
@@ -206,7 +199,6 @@
         body.dark-mode .stat-card-num { color: var(--gold-bright); }
         .stat-card-label { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
 
-        /* Live Search Bar */
         .search-wrapper { position: relative; margin-bottom: 10px; }
         .search-input {
             width: 100%; padding: 8px 12px 8px 32px; border: 1.5px solid var(--border-color);
@@ -214,7 +206,6 @@
         }
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text-muted); }
 
-        /* Form Inputs */
         .form-group { margin-bottom: 12px; }
         .form-label { display: block; font-size: 10px; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
         .form-input {
@@ -223,9 +214,8 @@
         }
         .form-input:focus { border-color: var(--emerald-surface); background-color: var(--bg-card); box-shadow: 0 0 0 3px rgba(16, 78, 58, 0.12); }
         .input-wrapper { position: relative; display: flex; align-items: center; }
-        .toggle-pw { position: absolute; right: 12px; cursor: pointer; color: var(--text-muted); font-size: 13px; }
+        .toggle-pw { position: absolute; right: 12px; cursor: pointer; color: var(--text-muted); font-size: 13px; z-index: 10; }
 
-        /* Buttons */
         .btn {
             width: 100%; padding: 11px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; border: none;
             display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -237,7 +227,6 @@
         .btn-success { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; box-shadow: 0 6px 16px rgba(22, 163, 74, 0.2); }
         .btn-gold { background: linear-gradient(135deg, var(--gold-accent) 0%, #d97706 100%); color: #ffffff; box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25); }
 
-        /* Demo Buttons */
         .demo-section { margin-top: 12px; padding-top: 10px; border-top: 1.5px dashed var(--border-color); }
         .demo-title { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; text-align: center; margin-bottom: 6px; }
         .demo-btn-group { display: flex; gap: 6px; }
@@ -251,7 +240,6 @@
         .auth-link a { color: var(--emerald-primary); font-weight: 800; text-decoration: none; }
         body.dark-mode .auth-link a { color: var(--gold-bright); }
 
-        /* Dashboard Header */
         .dash-nav {
             background: linear-gradient(135deg, var(--emerald-primary) 0%, var(--emerald-surface) 100%);
             color: #ffffff; padding: 16px 18px; border-radius: 20px; margin-bottom: 12px; flex-shrink: 0;
@@ -260,7 +248,6 @@
         .dash-user-name { font-size: 17px; font-weight: 800; color: var(--gold-bright); }
         .dash-user-role { font-size: 10px; opacity: 0.9; font-weight: 600; margin-top: 2px; }
 
-        /* Cards & Clock Gauge */
         .card {
             background: var(--bg-card); border-left: 4px solid var(--emerald-surface); border-radius: 16px;
             padding: 14px; margin-bottom: 10px; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft);
@@ -277,14 +264,13 @@
             border: 1px solid rgba(251, 191, 36, 0.3); box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8); letter-spacing: 2px;
         }
 
-        /* Status Badges */
         .badge { padding: 3px 8px; border-radius: 10px; font-size: 9px; font-weight: 800; display: inline-block; }
         .badge-pending { background-color: #fef3c7; color: #b45309; border: 1px solid #fde047; }
         .badge-verified { background-color: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
         .badge-approved { background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; }
         .badge-rejected { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
 
-        .log-item {
+        .log-item, .user-card {
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px;
             margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
@@ -302,19 +288,25 @@
         .audit-time { font-size: 9px; font-weight: 600; color: var(--text-muted); }
         .audit-details-text { font-size: 10px; color: var(--text-dark); margin-top: 4px; line-height: 1.4; }
 
-        /* Modal Overlay */
+        .otp-banner {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde047 100%);
+            border: 1.5px dashed #d97706; padding: 10px; border-radius: 12px; margin-bottom: 12px;
+            color: #78350f; font-size: 10px; font-weight: 700; text-align: center;
+        }
+
         .modal-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(6, 10, 18, 0.8); backdrop-filter: blur(8px); display: none;
             align-items: center; justify-content: center; padding: 20px; z-index: 500;
         }
         .modal-card {
-            background-color: var(--bg-card); border-radius: 24px; padding: 20px; width: 90%; max-width: 320px;
+            background-color: var(--bg-card); border-radius: 24px; padding: 20px; width: 92%; max-width: 340px;
             text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); border: 1px solid var(--border-color);
+            max-height: 85vh; overflow-y: auto;
         }
 
-        .pw-rules { font-size: 9px; color: var(--text-muted); margin-top: 4px; }
-        .rule-item { display: inline-block; margin-right: 4px; }
+        .pw-rules { font-size: 9px; color: var(--text-muted); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+        .rule-item { color: #94a3b8; font-weight: 600; }
         .rule-item.valid { color: #16a34a; font-weight: 800; }
     </style>
 </head>
@@ -348,6 +340,11 @@
                 <div class="app-subtitle">Western Leyte College of Ormoc</div>
             </div>
 
+            <!-- Progressive Lockout Counter Banner -->
+            <div id="lockoutBanner" style="display: none; background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; padding: 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 12px;">
+                <i class="fa-solid fa-lock"></i> Account temporarily locked. Try again in <span id="lockoutTimerSeconds">30</span>s.
+            </div>
+
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label class="form-label">Username or Email</label>
@@ -364,6 +361,10 @@
 
                 <button type="submit" class="btn btn-primary" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> Sign In to Portal</button>
             </form>
+
+            <div style="text-align: right; margin-top: 8px;">
+                <a href="#" onclick="switchScreen('forgotPasswordScreen')" style="font-size: 11px; color: var(--emerald-primary); font-weight: 700; text-decoration: none;">Forgot Password / OTP Recovery?</a>
+            </div>
 
             <div class="demo-section">
                 <div class="demo-title"><i class="fa-solid fa-bolt" style="color: var(--gold-bright);"></i> Quick Demo Access</div>
@@ -408,21 +409,22 @@
                         <option value="Student">Student Intern</option>
                         <option value="Supervisor">Agency Supervisor</option>
                         <option value="Faculty">Faculty / Coordinator</option>
+                        <option value="Admin">System Admin</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="input-wrapper">
-                        <input type="password" id="regPassword" class="form-input" onkeyup="checkPasswordComplexity(this.value)" placeholder="Password@123" required>
+                        <input type="password" id="regPassword" class="form-input" onkeyup="checkPasswordComplexity(this.value, 'reg')" placeholder="Password@123" required>
                         <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('regPassword', this)"></i>
                     </div>
                     <div class="pw-rules">
-                        <span id="ruleLength" class="rule-item">&bull; 8+ chars</span>
-                        <span id="ruleUpper" class="rule-item">&bull; Upper</span>
-                        <span id="ruleLower" class="rule-item">&bull; Lower</span>
-                        <span id="ruleNum" class="rule-item">&bull; Number</span>
-                        <span id="ruleSpecial" class="rule-item">&bull; Symbol</span>
+                        <span id="regRuleLength" class="rule-item">&bull; 8+ chars</span>
+                        <span id="regRuleUpper" class="rule-item">&bull; Upper</span>
+                        <span id="regRuleLower" class="rule-item">&bull; Lower</span>
+                        <span id="regRuleNum" class="rule-item">&bull; Number</span>
+                        <span id="regRuleSpecial" class="rule-item">&bull; Symbol</span>
                     </div>
                 </div>
 
@@ -430,6 +432,7 @@
                     <label class="form-label">Confirm Password</label>
                     <div class="input-wrapper">
                         <input type="password" id="regConfirmPassword" class="form-input" placeholder="Re-enter password" required>
+                        <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('regConfirmPassword', this)"></i>
                     </div>
                 </div>
 
@@ -441,7 +444,66 @@
             </div>
         </div>
 
-        <!-- 3. STUDENT DASHBOARD -->
+        <!-- 3. OTP PASSWORD RECOVERY SCREEN -->
+        <div id="forgotPasswordScreen" class="screen">
+            <div class="app-header">
+                <div class="app-title" style="font-size: 16px;">OTP Password Recovery</div>
+                <div class="app-subtitle">Database Connected Verification</div>
+            </div>
+
+            <!-- OTP Simulator Copy Banner -->
+            <div id="otpSimulatorBox" style="display: none;" class="otp-banner">
+                <div><i class="fa-solid fa-key"></i> <strong>OTP GENERATED & STORED IN DATABASE</strong></div>
+                <div style="margin: 6px 0; font-size: 14px; font-family: 'JetBrains Mono', monospace; font-weight: 800;" id="generatedOtpCodeDisplay">------</div>
+                <button type="button" class="btn btn-gold" style="padding: 6px; font-size: 10px;" onclick="copySimulatedOTP()"><i class="fa-solid fa-copy"></i> Click to Copy OTP Code</button>
+            </div>
+
+            <form id="otpRequestForm" onsubmit="handleRequestOTP(event)">
+                <div class="form-group">
+                    <label class="form-label">Registered Account Email</label>
+                    <input type="email" id="otpEmailInput" class="form-input" placeholder="Enter registered email" required>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send OTP Code</button>
+            </form>
+
+            <form id="otpVerifyForm" onsubmit="handleVerifyOTPAndReset(event)" style="display: none; margin-top: 12px;">
+                <div class="form-group">
+                    <label class="form-label">Enter 6-Digit OTP</label>
+                    <input type="text" id="otpCodeInput" class="form-input" placeholder="e.g. 849201" maxlength="6" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="otpNewPassword" class="form-input" onkeyup="checkPasswordComplexity(this.value, 'otp')" placeholder="NewPassword@123" required>
+                        <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('otpNewPassword', this)"></i>
+                    </div>
+                    <div class="pw-rules">
+                        <span id="otpRuleLength" class="rule-item">&bull; 8+ chars</span>
+                        <span id="otpRuleUpper" class="rule-item">&bull; Upper</span>
+                        <span id="otpRuleLower" class="rule-item">&bull; Lower</span>
+                        <span id="otpRuleNum" class="rule-item">&bull; Number</span>
+                        <span id="otpRuleSpecial" class="rule-item">&bull; Symbol</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm New Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="otpConfirmPassword" class="form-input" placeholder="Re-enter new password" required>
+                        <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('otpConfirmPassword', this)"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-key"></i> Reset Password & Sign In</button>
+            </form>
+
+            <div class="auth-link">
+                Remember your password? <a href="#" onclick="switchScreen('loginScreen')">Back to Login</a>
+            </div>
+        </div>
+
+        <!-- 4. STUDENT DASHBOARD -->
         <div id="studentDashboard" class="screen">
             <div class="dash-nav">
                 <div class="dash-user-name" id="stdName">Student Name</div>
@@ -540,7 +602,7 @@
             <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
 
-        <!-- 4. SUPERVISOR DASHBOARD -->
+        <!-- 5. ENHANCED SUPERVISOR DASHBOARD -->
         <div id="supervisorDashboard" class="screen">
             <div class="dash-nav">
                 <div class="dash-user-name" id="supName">Supervisor Name</div>
@@ -548,19 +610,36 @@
             </div>
 
             <div class="tab-bar">
-                <button class="tab-btn active" onclick="switchSubTab('supervisor', 'verifyLogsTab', event)"><i class="fa-solid fa-user-check"></i> Log Verifications</button>
-                <button class="tab-btn" onclick="switchSubTab('supervisor', 'evalTab', event)"><i class="fa-solid fa-star"></i> Performance Rubric</button>
+                <button class="tab-btn active" onclick="switchSubTab('supervisor', 'verifyLogsTab', event)"><i class="fa-solid fa-user-check"></i> Verifications</button>
+                <button class="tab-btn" onclick="switchSubTab('supervisor', 'rosterTab', event)"><i class="fa-solid fa-address-book"></i> Intern Roster</button>
+                <button class="tab-btn" onclick="switchSubTab('supervisor', 'evalTab', event)"><i class="fa-solid fa-star"></i> Performance</button>
+                <button class="tab-btn" onclick="switchSubTab('supervisor', 'evalHistoryTab', event)"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
             </div>
 
+            <!-- SUBTAB 1: LOG VERIFICATIONS WITH BATCH APPROVAL -->
             <div id="supVerifyLogsTab" class="subtab-panel">
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search pending logs..." onkeyup="filterContainer(this.value, 'supervisorLogList')">
+                <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 8px;">
+                    <div class="search-wrapper" style="flex: 1; margin-bottom: 0;">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search pending logs..." onkeyup="filterContainer(this.value, 'supervisorLogList')">
+                    </div>
+                    <button class="btn btn-gold" style="width: auto; padding: 0 10px; height: 34px; font-size: 10px;" onclick="batchVerifyLogs()"><i class="fa-solid fa-check-double"></i> Approve All</button>
                 </div>
                 <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;">Pending Verification Requests</div>
                 <div id="supervisorLogList" style="flex: 1;"></div>
             </div>
 
+            <!-- SUBTAB 2: INTERN ROSTER VIEW -->
+            <div id="supRosterTab" class="subtab-panel" style="display: none;">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search assigned interns..." onkeyup="filterContainer(this.value, 'supervisorRosterList')">
+                </div>
+                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-users"></i> Assigned Student Interns</div>
+                <div id="supervisorRosterList" style="flex: 1;"></div>
+            </div>
+
+            <!-- SUBTAB 3: EVALUATION FORM -->
             <div id="supEvalTab" class="subtab-panel" style="display: none;">
                 <div class="card">
                     <div class="card-title">Submit Student Performance Rubric</div>
@@ -599,32 +678,80 @@
                 </div>
             </div>
 
+            <!-- SUBTAB 4: EVALUATION HISTORY -->
+            <div id="supEvalHistoryTab" class="subtab-panel" style="display: none;">
+                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-history"></i> Submitted Performance Rubrics</div>
+                <div id="supervisorEvalHistoryList" style="flex: 1;"></div>
+            </div>
+
             <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
 
-        <!-- 5. FACULTY DASHBOARD -->
+        <!-- 6. ENHANCED FACULTY & ADMIN DASHBOARD -->
         <div id="facultyDashboard" class="screen">
             <div class="dash-nav">
                 <div class="dash-user-name" id="facName">Faculty Coordinator</div>
-                <div class="dash-user-role">WLC OJT Adviser & Admin</div>
+                <div class="dash-user-role" id="facRoleSubtitle">WLC OJT Adviser & Admin</div>
             </div>
 
             <div class="tab-bar">
-                <button class="tab-btn active" onclick="switchSubTab('faculty', 'facLogsTab', event)">Approvals</button>
-                <button class="tab-btn" onclick="switchSubTab('faculty', 'facDocsTab', event)">Doc Audits</button>
-                <button class="tab-btn" onclick="switchSubTab('faculty', 'facAuditTab', event)">IAS Trail</button>
+                <button class="tab-btn active" onclick="switchSubTab('faculty', 'facLogsTab', event)"><i class="fa-solid fa-square-check"></i> Approvals</button>
+                <button class="tab-btn" onclick="switchSubTab('faculty', 'facAnalyticsTab', event)"><i class="fa-solid fa-chart-pie"></i> Analytics</button>
+                <button class="tab-btn" onclick="switchSubTab('faculty', 'facDocsTab', event)"><i class="fa-solid fa-folder-open"></i> Docs</button>
+                <button class="tab-btn" onclick="switchSubTab('faculty', 'facUserCrudTab', event)"><i class="fa-solid fa-users-gear"></i> Users</button>
+                <button class="tab-btn" onclick="switchSubTab('faculty', 'facAuditTab', event)"><i class="fa-solid fa-shield-halved"></i> Audit</button>
             </div>
 
+            <!-- SUBTAB 1: LOG APPROVALS -->
             <div id="facLogsTab" class="subtab-panel">
                 <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;">Verified Logs Awaiting Final Approval</div>
                 <div id="facultyLogList" style="flex: 1;"></div>
             </div>
 
+            <!-- SUBTAB 2: CLASS ANALYTICS & MASTER ROSTER -->
+            <div id="facAnalyticsTab" class="subtab-panel" style="display: none;">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="facStatTotalStudents">0</div>
+                        <div class="stat-card-label">Active Interns</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="facStatCompletedOjt">0</div>
+                        <div class="stat-card-label">Completed OJTs</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-gold" style="margin-bottom: 10px; padding: 8px;" onclick="exportClassSummaryCSV()"><i class="fa-solid fa-file-csv"></i> Export Class Progress CSV</button>
+
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search class progress..." onkeyup="filterContainer(this.value, 'facultyClassMasterList')">
+                </div>
+
+                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-graduation-cap"></i> Student Master Class Progress</div>
+                <div id="facultyClassMasterList" style="flex: 1;"></div>
+            </div>
+
+            <!-- SUBTAB 3: DOCUMENT AUDITS -->
             <div id="facDocsTab" class="subtab-panel" style="display: none;">
                 <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;">Pre-OJT Documents Submitted for Audit</div>
                 <div id="facultyDocsList" style="flex: 1;"></div>
             </div>
 
+            <!-- SUBTAB 4: USER CRUD MODULE -->
+            <div id="facUserCrudTab" class="subtab-panel" style="display: none;">
+                <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                    <div class="search-wrapper" style="flex: 1; margin-bottom: 0;">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search system users..." onkeyup="filterContainer(this.value, 'userCrudList')">
+                    </div>
+                    <button class="btn btn-primary" style="width: auto; padding: 0 10px;" onclick="openCreateUserModal()"><i class="fa-solid fa-user-plus"></i> Add</button>
+                </div>
+
+                <div id="userCrudList" style="flex: 1; overflow-y: auto;"></div>
+            </div>
+
+            <!-- SUBTAB 5: LOG TRAIL / SYSTEM AUDIT MODULE -->
             <div id="facAuditTab" class="subtab-panel" style="display: none;">
                 <div class="search-wrapper">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -639,7 +766,7 @@
             <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
 
-        <!-- 6. LOGOUT MODAL -->
+        <!-- 7. LOGOUT MODAL -->
         <div id="logoutModal" class="modal-overlay">
             <div class="modal-card">
                 <div style="font-size: 16px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px;">Confirm Logout</div>
@@ -651,6 +778,69 @@
             </div>
         </div>
 
+        <!-- 8. USER CRUD MODAL (CREATE / EDIT) -->
+        <div id="userModal" class="modal-overlay">
+            <div class="modal-card">
+                <div style="font-size: 15px; font-weight: 800; color: var(--text-dark); margin-bottom: 12px; text-align: left;" id="userModalTitle">Manage User Account</div>
+                <form id="userModalForm" onsubmit="handleSaveUser(event)" style="text-align: left;">
+                    <input type="hidden" id="modalUserId">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="modalFullName" class="form-input" placeholder="e.g. Juan Cruz" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="modalUsername" class="form-input" placeholder="e.g. juancruz" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="modalEmail" class="form-input" placeholder="e.g. juan@wlc.edu.ph" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">System Role</label>
+                        <select id="modalRole" class="form-input" required>
+                            <option value="Student">Student Intern</option>
+                            <option value="Supervisor">Agency Supervisor</option>
+                            <option value="Faculty">Faculty Coordinator</option>
+                            <option value="Admin">System Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Account Status</label>
+                        <select id="modalStatus" class="form-input" required>
+                            <option value="Active">Active</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="modalPasswordGroup">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="modalPassword" class="form-input" placeholder="Min 8 chars, mixed case, symbol">
+                            <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('modalPassword', this)"></i>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 14px;">
+                        <button type="button" class="btn btn-danger" style="flex: 1;" onclick="closeUserModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 9. STUDENT DETAILS INSPECTOR MODAL (FOR FACULTY) -->
+        <div id="studentDetailsModal" class="modal-overlay">
+            <div class="modal-card">
+                <div style="font-size: 15px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 4px; text-align: left;" id="inspectorStudentName">Student Profile</div>
+                <div style="font-size: 10px; color: var(--text-muted); text-align: left; margin-bottom: 12px;" id="inspectorStudentSub">BSIT Student</div>
+
+                <div id="inspectorContent" style="text-align: left; font-size: 11px;">
+                    <!-- Dynamically populated student details -->
+                </div>
+
+                <button class="btn btn-primary" style="margin-top: 14px;" onclick="closeStudentDetailsModal()">Close Profile</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -658,12 +848,13 @@
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndWNlbmZnZWthc2F6ZWd1cXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4NzY4MzgsImV4cCI6MjEwNzQ1MjgzOH0.dZp1nmNkUgZt3m7uJlCvn7Q6LzABH3bpY6tRIBweGqM";
 
     let currentUser = null;
-    let failedAttempts = 0;
-    let lockoutTimer = null;
+    let lockoutInterval = null;
     let currentLat = null, currentLng = null;
     let clockInterval = null;
     let clockStartTime = null;
     let cachedStudentLogs = [];
+    let currentGeneratedOTP = null;
+    let masterStudentsList = [];
     const usersCache = {};
 
     const headers = {
@@ -673,7 +864,6 @@
         "Prefer": "return=representation"
     };
 
-    // Dark Mode Toggle Switcher
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         const icon = document.querySelector('.theme-toggle-btn');
@@ -686,7 +876,6 @@
         }
     }
 
-    // Live Search Filter Helper
     function filterContainer(query, containerId) {
         const term = query.toLowerCase();
         const container = document.getElementById(containerId);
@@ -698,7 +887,6 @@
         }
     }
 
-    // Audio Engine Click Effect
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playComfortClick() {
         try {
@@ -750,12 +938,22 @@
             setTabVisible('studentDocsTab', tabName === 'docsTab');
         } else if (role === 'supervisor') {
             setTabVisible('supVerifyLogsTab', tabName === 'verifyLogsTab');
+            setTabVisible('supRosterTab', tabName === 'rosterTab');
             setTabVisible('supEvalTab', tabName === 'evalTab');
-            if (tabName === 'verifyLogsTab' || tabName === 'evalTab') loadSupervisorDashboard();
+            setTabVisible('supEvalHistoryTab', tabName === 'evalHistoryTab');
+
+            if (tabName === 'verifyLogsTab') loadSupervisorDashboard();
+            if (tabName === 'rosterTab') loadSupervisorRoster();
+            if (tabName === 'evalHistoryTab') loadSupervisorEvalHistory();
         } else if (role === 'faculty') {
             setTabVisible('facLogsTab', tabName === 'facLogsTab');
+            setTabVisible('facAnalyticsTab', tabName === 'facAnalyticsTab');
             setTabVisible('facDocsTab', tabName === 'facDocsTab');
+            setTabVisible('facUserCrudTab', tabName === 'facUserCrudTab');
             setTabVisible('facAuditTab', tabName === 'facAuditTab');
+
+            if (tabName === 'facAnalyticsTab') loadFacultyClassAnalytics();
+            if (tabName === 'facUserCrudTab') loadUserCrudList();
             if (tabName === 'facAuditTab') fetchAndRenderAuditLogs();
             if (tabName === 'facDocsTab' || tabName === 'facLogsTab') loadFacultyDashboard();
         }
@@ -778,10 +976,16 @@
         else { el.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
     }
 
-    function checkPasswordComplexity(pw) {
-        const rules = { Length: pw.length >= 8, Upper: /[A-Z]/.test(pw), Lower: /[a-z]/.test(pw), Num: /[0-9]/.test(pw), Special: /[^A-Za-z0-9]/.test(pw) };
+    function checkPasswordComplexity(pw, prefix = '') {
+        const rules = {
+            Length: pw.length >= 8,
+            Upper: /[A-Z]/.test(pw),
+            Lower: /[a-z]/.test(pw),
+            Num: /[0-9]/.test(pw),
+            Special: /[^A-Za-z0-9]/.test(pw)
+        };
         for (let r in rules) {
-            const el = document.getElementById(`rule${r}`);
+            const el = document.getElementById(`${prefix}Rule${r}`) || document.getElementById(`rule${r}`);
             if (el) {
                 if (rules[r]) el.classList.add('valid'); else el.classList.remove('valid');
             }
@@ -793,7 +997,7 @@
         try {
             await fetch(`${SUPABASE_URL}/audit_logs`, {
                 method: 'POST', headers,
-                body: JSON.stringify({ user_id: currentUser ? currentUser.id : null, username: currentUser ? currentUser.username : 'Guest', action, details })
+                body: JSON.stringify({ user_id: currentUser ? currentUser.id : null, username: currentUser ? currentUser.username : 'Guest/System', action, details })
             });
         } catch (e) {}
     }
@@ -820,31 +1024,93 @@
 
     async function handleLogin(e) {
         e.preventDefault();
-        const username = document.getElementById('loginUsername').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
-
-        if (lockoutTimer) { showToast("Account locked due to multiple failed attempts.", "warning"); return; }
+        const usernameInput = document.getElementById('loginUsername').value.trim();
+        const passwordInput = document.getElementById('loginPassword').value.trim();
 
         try {
-            const res = await fetch(`${SUPABASE_URL}/users?or=(username.eq.${encodeURIComponent(username)},email.eq.${encodeURIComponent(username)})`, { headers });
+            const res = await fetch(`${SUPABASE_URL}/users?or=(username.eq.${encodeURIComponent(usernameInput)},email.eq.${encodeURIComponent(usernameInput)})`, { headers });
             const users = await res.json();
 
-            if (!Array.isArray(users) || users.length === 0 || users[0].password !== password) {
-                failedAttempts++;
-                if (failedAttempts >= 3) {
-                    showToast("Too many failed attempts. Locked for 30s.", "warning");
-                    lockoutTimer = setTimeout(() => { lockoutTimer = null; failedAttempts = 0; }, 30000);
-                } else { showToast("Incorrect username or password.", "error"); }
+            if (!Array.isArray(users) || users.length === 0) {
+                showToast("Incorrect username or password.", "error");
+                await logActivity("FAILED_LOGIN", `Failed attempt for unknown user: ${usernameInput}`);
                 return;
             }
 
-            failedAttempts = 0;
-            currentUser = users[0];
-            await logActivity("USER_LOGIN", `User ${currentUser.username} logged in (${currentUser.role}).`);
+            const user = users[0];
+
+            if (user.status === 'Suspended') {
+                showToast("Account suspended. Contact administrator.", "error");
+                await logActivity("LOGIN_BLOCKED", `Suspended user ${user.username} login attempt.`);
+                return;
+            }
+
+            if (user.lockout_until && new Date(user.lockout_until) > new Date()) {
+                const remainingSecs = Math.ceil((new Date(user.lockout_until) - new Date()) / 1000);
+                startLockoutCountdown(remainingSecs);
+                showToast(`Account locked! Try again in ${remainingSecs}s.`, "error");
+                return;
+            }
+
+            if (user.password !== passwordInput) {
+                const newFailed = (user.failed_attempts || 0) + 1;
+                let updateData = { failed_attempts: newFailed };
+
+                if (newFailed % 3 === 0) {
+                    const lockoutMultiplier = Math.floor(newFailed / 3);
+                    const durationSeconds = 30 * Math.pow(2, lockoutMultiplier - 1);
+                    const lockoutUntil = new Date(Date.now() + durationSeconds * 1000).toISOString();
+                    
+                    updateData.lockout_until = lockoutUntil;
+                    updateData.lockout_count = (user.lockout_count || 0) + 1;
+
+                    startLockoutCountdown(durationSeconds);
+                    showToast(`3 unsuccessful attempts! Account locked for ${durationSeconds}s.`, "error");
+                    await logActivity("ACCOUNT_LOCKED", `User ${user.username} locked out for ${durationSeconds}s.`);
+                } else {
+                    showToast(`Incorrect password! Attempt ${newFailed}/3 before lockout.`, "error");
+                    await logActivity("FAILED_LOGIN", `Incorrect password for user ${user.username}`);
+                }
+
+                await fetch(`${SUPABASE_URL}/users?id=eq.${user.id}`, { method: 'PATCH', headers, body: JSON.stringify(updateData) });
+                return;
+            }
+
+            await fetch(`${SUPABASE_URL}/users?id=eq.${user.id}`, {
+                method: 'PATCH', headers,
+                body: JSON.stringify({ failed_attempts: 0, lockout_until: null })
+            });
+
+            currentUser = user;
+            localStorage.setItem('intern_session', JSON.stringify(currentUser));
+            await logActivity("USER_LOGIN", `User ${currentUser.username} logged in successfully (${currentUser.role}).`);
             showToast(`Welcome back, ${currentUser.full_name}!`, "success");
+            
             document.getElementById('loginForm').reset();
             routeUserDashboard();
+
         } catch (err) { showToast("Connection to Supabase failed.", "error"); }
+    }
+
+    function startLockoutCountdown(seconds) {
+        const banner = document.getElementById('lockoutBanner');
+        const timerEl = document.getElementById('lockoutTimerSeconds');
+        if (!banner || !timerEl) return;
+
+        banner.style.display = 'block';
+        timerEl.innerText = seconds;
+
+        if (lockoutInterval) clearInterval(lockoutInterval);
+        let rem = seconds;
+
+        lockoutInterval = setInterval(() => {
+            rem--;
+            timerEl.innerText = rem;
+            if (rem <= 0) {
+                clearInterval(lockoutInterval);
+                banner.style.display = 'none';
+            }
+        }, 1000);
     }
 
     async function handleRegister(e) {
@@ -856,13 +1122,13 @@
         const password = document.getElementById('regPassword').value.trim();
         const confirmPw = document.getElementById('regConfirmPassword').value.trim();
 
-        if (password !== confirmPw) { showToast("Passwords do not match.", "error"); return; }
-        if (!checkPasswordComplexity(password)) { showToast("Password does not meet complexity rules.", "error"); return; }
+        if (password !== confirmPw) { showToast("Confirm password does not match!", "error"); return; }
+        if (!checkPasswordComplexity(password, 'reg')) { showToast("Password does not meet complexity rules!", "error"); return; }
 
         try {
             const userRes = await fetch(`${SUPABASE_URL}/users`, {
                 method: 'POST', headers,
-                body: JSON.stringify({ username, password, full_name, email, role })
+                body: JSON.stringify({ username, password, full_name, email, role, status: 'Active' })
             });
 
             const registeredUsers = await userRes.json();
@@ -871,18 +1137,11 @@
             }
 
             const newUser = registeredUsers[0];
-
             if (role === 'Student' && newUser && newUser.id) {
                 const stdNum = "WLC-2026-" + Math.floor(1000 + Math.random() * 9000);
                 await fetch(`${SUPABASE_URL}/student_profiles`, {
                     method: 'POST', headers,
-                    body: JSON.stringify({
-                        user_id: newUser.id,
-                        student_id_number: stdNum,
-                        course_program: 'BSIT',
-                        required_hours: 486.00,
-                        rendered_hours: 0.00
-                    })
+                    body: JSON.stringify({ user_id: newUser.id, student_id_number: stdNum, course_program: 'BSIT', required_hours: 486.00, rendered_hours: 0.00 })
                 });
             }
 
@@ -890,7 +1149,97 @@
             showToast("Account created successfully! You can now log in.", "success");
             document.getElementById('registerForm').reset();
             setTimeout(() => switchScreen('loginScreen'), 1200);
+
         } catch (err) { showToast("Registration failed.", "error"); }
+    }
+
+    async function handleRequestOTP(e) {
+        e.preventDefault();
+        const email = document.getElementById('otpEmailInput').value.trim();
+
+        try {
+            const res = await fetch(`${SUPABASE_URL}/users?email=eq.${encodeURIComponent(email)}`, { headers });
+            const users = await res.json();
+
+            if (!Array.isArray(users) || users.length === 0) {
+                showToast("Email address not found.", "error"); return;
+            }
+
+            const user = users[0];
+
+            await fetch(`${SUPABASE_URL}/otp_tokens?email=eq.${encodeURIComponent(email)}`, {
+                method: 'DELETE',
+                headers
+            });
+
+            const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+            currentGeneratedOTP = generatedOtp;
+
+            const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+            await fetch(`${SUPABASE_URL}/otp_tokens`, {
+                method: 'POST', headers,
+                body: JSON.stringify({ user_id: user.id, email: user.email, otp_code: generatedOtp, expires_at: expiresAt })
+            });
+
+            await logActivity("OTP_REQUESTED", `OTP generated for user ${user.username} (${user.email})`);
+
+            document.getElementById('otpSimulatorBox').style.display = 'block';
+            document.getElementById('generatedOtpCodeDisplay').innerText = generatedOtp;
+            document.getElementById('otpVerifyForm').style.display = 'block';
+
+            showToast("OTP generated and recorded in DB!", "success");
+
+        } catch (err) { showToast("Failed to generate OTP.", "error"); }
+    }
+
+    function copySimulatedOTP() {
+        if (currentGeneratedOTP) {
+            navigator.clipboard.writeText(currentGeneratedOTP);
+            document.getElementById('otpCodeInput').value = currentGeneratedOTP;
+            showToast("OTP copied & pasted into field!", "success");
+        }
+    }
+
+    async function handleVerifyOTPAndReset(e) {
+        e.preventDefault();
+        const email = document.getElementById('otpEmailInput').value.trim();
+        const otpInput = document.getElementById('otpCodeInput').value.trim();
+        const newPassword = document.getElementById('otpNewPassword').value.trim();
+        const confirmPw = document.getElementById('otpConfirmPassword').value.trim();
+
+        if (newPassword !== confirmPw) { showToast("Confirm password does not match!", "error"); return; }
+        if (!checkPasswordComplexity(newPassword, 'otp')) { showToast("New password fails complexity rules!", "error"); return; }
+
+        try {
+            const otpRes = await fetch(`${SUPABASE_URL}/otp_tokens?email=eq.${encodeURIComponent(email)}&otp_code=eq.${otpInput}&is_used=eq.false&order=created_at.desc`, { headers });
+            const tokens = await otpRes.json();
+
+            if (!Array.isArray(tokens) || tokens.length === 0) {
+                showToast("Invalid or expired OTP code.", "error"); return;
+            }
+
+            await fetch(`${SUPABASE_URL}/otp_tokens?email=eq.${encodeURIComponent(email)}`, {
+                method: 'DELETE',
+                headers
+            });
+
+            const userRes = await fetch(`${SUPABASE_URL}/users?email=eq.${encodeURIComponent(email)}`, { headers });
+            const users = await userRes.json();
+            const user = users[0];
+
+            await fetch(`${SUPABASE_URL}/users?id=eq.${user.id}`, {
+                method: 'PATCH', headers,
+                body: JSON.stringify({ password: newPassword, failed_attempts: 0, lockout_until: null })
+            });
+
+            await logActivity("PASSWORD_RESET", `Password reset completed via OTP for user ${user.username}`);
+            showToast("Password updated! Logging in...", "success");
+
+            currentUser = user;
+            localStorage.setItem('intern_session', JSON.stringify(currentUser));
+            routeUserDashboard();
+
+        } catch (err) { showToast("Password reset failed.", "error"); }
     }
 
     function routeUserDashboard() {
@@ -905,15 +1254,16 @@
             if (nameEl) nameEl.innerText = currentUser.full_name;
             switchScreen('supervisorDashboard'); 
             loadSupervisorDashboard();
-        } else if (currentUser.role === 'Faculty') {
+        } else if (currentUser.role === 'Faculty' || currentUser.role === 'Admin') {
             const nameEl = document.getElementById('facName');
+            const subEl = document.getElementById('facRoleSubtitle');
             if (nameEl) nameEl.innerText = currentUser.full_name;
+            if (subEl) subEl.innerText = `${currentUser.role} Control Center`;
             switchScreen('facultyDashboard'); 
             loadFacultyDashboard();
         }
     }
 
-    // STUDENT DASHBOARD
     async function loadStudentDashboard() {
         if (!currentUser) return;
         try {
@@ -936,7 +1286,6 @@
                 document.getElementById('stdHoursDisplay').innerText = `${rendered.toFixed(2)} / ${required} Hours (${percent}%)`;
                 document.getElementById('stdProgressBar').style.width = `${percent}%`;
                 
-                // Stat widget update
                 const statHrs = document.getElementById('statCompletedHours');
                 if (statHrs) statHrs.innerText = `${rendered.toFixed(1)}h`;
             }
@@ -945,7 +1294,6 @@
             const logs = await logsRes.json();
             cachedStudentLogs = Array.isArray(logs) ? logs : [];
 
-            // Stat log count update
             const statLogs = document.getElementById('statLogCount');
             if (statLogs) statLogs.innerText = cachedStudentLogs.length;
 
@@ -975,7 +1323,6 @@
         loadStudentDocuments();
     }
 
-    // CLOCK IN & TIMER LOGIC
     function handleClockPunch() {
         startPunchTimer();
         if (navigator.geolocation) {
@@ -1090,7 +1437,6 @@
         }
     }
 
-    // FORMAL PRINTABLE DTR REPORT GENERATOR
     function generatePrintableDTR() {
         if (!currentUser) return;
         
@@ -1232,7 +1578,7 @@
         loadStudentDocuments();
     }
 
-    // SUPERVISOR DASHBOARD
+    // SUPERVISOR FUNCTIONS
     async function loadSupervisorDashboard() {
         try {
             const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?supervisor_status=eq.Pending&order=created_at.desc`, { headers });
@@ -1253,8 +1599,8 @@
                                 <div class="log-desc">${log.task_description}</div>
                                 ${log.location_lat ? `<div style="font-size:9px; color:var(--text-muted); margin-bottom:6px;"><i class="fa-solid fa-location-dot"></i> GPS: ${log.location_lat},${log.location_lng}</div>` : ''}
                                 <div style="display:flex; gap:6px; width:100%;">
-                                    <button class="btn btn-success" style="flex:1; padding:7px; font-size:10px;" onclick="verifyLog('${log.id}', 'Verified')">Verify Entry</button>
-                                    <button class="btn btn-danger" style="flex:1; padding:7px; font-size:10px;" onclick="verifyLog('${log.id}', 'Rejected')">Reject</button>
+                                    <button class="btn btn-success" style="flex:1; padding:7px; font-size:10px;" onclick="verifyLog('${log.id}', 'Verified')"><i class="fa-solid fa-check"></i> Verify Entry</button>
+                                    <button class="btn btn-danger" style="flex:1; padding:7px; font-size:10px;" onclick="rejectLogWithRemark('${log.id}')"><i class="fa-solid fa-xmark"></i> Reject</button>
                                 </div>
                             </div>
                         `;
@@ -1271,17 +1617,110 @@
                     students.forEach(s => { 
                         select.innerHTML += `<option value="${s.id}">${s.full_name || s.username} (${s.username})<\/option>`; 
                     });
-                } else {
-                    const allUsersRes = await fetch(`${SUPABASE_URL}/users`, { headers });
-                    const allUsers = await allUsersRes.json();
-                    if (Array.isArray(allUsers)) {
-                        allUsers.filter(u => u.role !== 'Supervisor' && u.role !== 'Faculty').forEach(s => {
-                            select.innerHTML += `<option value="${s.id}">${s.full_name || s.username} (${s.username})<\/option>`;
-                        });
-                    }
                 }
             }
         } catch (err) { console.error("Supervisor dashboard error:", err); }
+    }
+
+    async function batchVerifyLogs() {
+        try {
+            const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?supervisor_status=eq.Pending`, { headers });
+            const pendingLogs = await logsRes.json();
+
+            if (!Array.isArray(pendingLogs) || pendingLogs.length === 0) {
+                showToast("No pending logs to batch approve.", "warning"); return;
+            }
+
+            if (!confirm(`Are you sure you want to approve all ${pendingLogs.length} pending logs?`)) return;
+
+            for (const log of pendingLogs) {
+                await fetch(`${SUPABASE_URL}/ojt_logs?id=eq.${log.id}`, {
+                    method: 'PATCH', headers,
+                    body: JSON.stringify({ supervisor_status: 'Verified' })
+                });
+            }
+
+            await logActivity("SUPERVISOR_BATCH_VERIFY", `Batch approved ${pendingLogs.length} logs.`);
+            showToast(`Successfully verified ${pendingLogs.length} student logs!`, "success");
+            loadSupervisorDashboard();
+
+        } catch (err) { showToast("Batch approve failed.", "error"); }
+    }
+
+    async function rejectLogWithRemark(logId) {
+        const remark = prompt("Please state reason for rejecting this daily log:");
+        if (remark === null) return;
+
+        await fetch(`${SUPABASE_URL}/ojt_logs?id=eq.${logId}`, {
+            method: 'PATCH', headers,
+            body: JSON.stringify({ supervisor_status: 'Rejected', task_description: `[REJECTED: ${remark}]` })
+        });
+
+        await logActivity("SUPERVISOR_REJECT", `Rejected log ${logId}. Remark: ${remark}`);
+        showToast("Log entry rejected with remark.", "success");
+        loadSupervisorDashboard();
+    }
+
+    async function loadSupervisorRoster() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/users?or=(role.eq.Student,role.eq.student)&order=full_name.asc`, { headers });
+            const students = await res.json();
+            const list = document.getElementById('supervisorRosterList');
+            if (!list) return;
+
+            list.innerHTML = (!Array.isArray(students) || students.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No interns assigned.<\/p>' : '';
+
+            if (Array.isArray(students)) {
+                for (const s of students) {
+                    const profRes = await fetch(`${SUPABASE_URL}/student_profiles?user_id=eq.${s.id}`, { headers });
+                    const profs = await profRes.json();
+                    const prof = (Array.isArray(profs) && profs.length > 0) ? profs[0] : { rendered_hours: 0, required_hours: 486, student_id_number: 'N/A' };
+                    const percent = Math.min(100, ((prof.rendered_hours || 0) / (prof.required_hours || 486)) * 100).toFixed(1);
+
+                    list.innerHTML += `
+                        <div class="user-card">
+                            <div class="log-header">
+                                <span style="font-size:11px; font-weight:800; color:var(--emerald-primary);">${s.full_name}</span>
+                                <span class="badge badge-verified">${prof.rendered_hours || 0} / ${prof.required_hours || 486} hrs</span>
+                            </div>
+                            <div style="font-size:10px; color:var(--text-muted);">ID: <strong>${prof.student_id_number}</strong> | ${s.email}</div>
+                            <div class="progress-bar-bg" style="margin-top:6px;">
+                                <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        } catch (e) { showToast("Error loading intern roster.", "error"); }
+    }
+
+    async function loadSupervisorEvalHistory() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/evaluations?supervisor_id=eq.${currentUser.id}&order=created_at.desc`, { headers });
+            const evals = await res.json();
+            const list = document.getElementById('supervisorEvalHistoryList');
+            if (!list) return;
+
+            list.innerHTML = (!Array.isArray(evals) || evals.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No evaluations submitted yet.<\/p>' : '';
+
+            if (Array.isArray(evals)) {
+                for (const ev of evals) {
+                    const studentName = await getUserFullName(ev.student_id);
+                    list.innerHTML += `
+                        <div class="log-item">
+                            <div class="log-header">
+                                <span style="font-size:11px; font-weight:800; color:var(--emerald-primary);">${studentName}</span>
+                                <span class="badge badge-approved">${ev.eval_type} Rating: ${ev.overall_rating}/5.0</span>
+                            </div>
+                            <div style="font-size:10px; color:var(--text-dark); margin-top:4px;">
+                                Punctuality: ${ev.punctuality_score} | Quality: ${ev.quality_of_work_score} | Pro: ${ev.professionalism_score} | Comm: ${ev.communication_score}
+                            </div>
+                            <div style="font-size:9px; color:var(--text-muted); margin-top:2px;">Submitted on ${new Date(ev.created_at).toLocaleDateString()}</div>
+                        </div>
+                    `;
+                }
+            }
+        } catch (e) { console.error("Eval history error:", e); }
     }
 
     async function verifyLog(logId, status) {
@@ -1299,8 +1738,7 @@
 
         const studentSelect = document.getElementById('evalStudentSelect');
         if (!studentSelect || !studentSelect.value) {
-            showToast("Please select a valid student intern.", "error");
-            return;
+            showToast("Please select a valid student intern.", "error"); return;
         }
 
         const student_id = studentSelect.value;
@@ -1314,44 +1752,22 @@
 
         const overall_rating = parseFloat(((punctuality_score + quality_of_work_score + professionalism_score + communication_score) / 4).toFixed(2));
 
-        if (!supervisor_id) {
-            showToast("Supervisor ID missing. Please log in again.", "error");
-            return;
-        }
-
         try {
             const response = await fetch(`${SUPABASE_URL}/evaluations`, {
                 method: 'POST',
                 headers: headers,
-                body: JSON.stringify({
-                    student_id: student_id,
-                    supervisor_id: supervisor_id,
-                    eval_type: eval_type,
-                    punctuality_score: punctuality_score,
-                    quality_of_work_score: quality_of_work_score,
-                    professionalism_score: professionalism_score,
-                    communication_score: communication_score,
-                    overall_rating: overall_rating
-                })
+                body: JSON.stringify({ student_id, supervisor_id, eval_type, punctuality_score, quality_of_work_score, professionalism_score, communication_score, overall_rating })
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Supabase Evaluation Insert Error:", errorData);
-                showToast("Failed to save evaluation to database.", "error");
-                return;
-            }
+            if (!response.ok) { showToast("Failed to save evaluation to database.", "error"); return; }
 
             await logActivity("EVALUATION_SUBMIT", `Submitted ${eval_type} evaluation for student ID ${student_id}.`);
             showToast(`Evaluation submitted! Rating: ${overall_rating}/5.0`, "success");
 
-        } catch (err) {
-            console.error("Evaluation network exception:", err);
-            showToast("Connection error while submitting evaluation.", "error");
-        }
+        } catch (err) { showToast("Connection error while submitting evaluation.", "error"); }
     }
 
-    // FACULTY DASHBOARD & AUDITS
+    // FACULTY FUNCTIONS & CLASS MASTER ANALYTICS
     async function loadFacultyDashboard() {
         try {
             const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?supervisor_status=eq.Verified&faculty_status=eq.Pending&order=created_at.desc`, { headers });
@@ -1402,8 +1818,214 @@
                 }
             }
 
+            loadUserCrudList();
             fetchAndRenderAuditLogs();
         } catch (err) { console.error("Faculty dashboard error:", err); }
+    }
+
+    async function loadFacultyClassAnalytics() {
+        try {
+            const stdRes = await fetch(`${SUPABASE_URL}/users?or=(role.eq.Student,role.eq.student)&order=full_name.asc`, { headers });
+            const students = await stdRes.json();
+            masterStudentsList = Array.isArray(students) ? students : [];
+
+            document.getElementById('facStatTotalStudents').innerText = masterStudentsList.length;
+
+            let completedCount = 0;
+            const list = document.getElementById('facultyClassMasterList');
+            if (!list) return;
+
+            list.innerHTML = masterStudentsList.length === 0 ? '<p style="font-size:11px; color:var(--text-muted);">No enrolled students found.<\/p>' : '';
+
+            for (const s of masterStudentsList) {
+                const profRes = await fetch(`${SUPABASE_URL}/student_profiles?user_id=eq.${s.id}`, { headers });
+                const profs = await profRes.json();
+                const prof = (Array.isArray(profs) && profs.length > 0) ? profs[0] : { rendered_hours: 0, required_hours: 486, student_id_number: 'N/A' };
+                const rendered = parseFloat(prof.rendered_hours || 0);
+                const required = parseFloat(prof.required_hours || 486);
+                const percent = Math.min(100, (rendered / required) * 100).toFixed(1);
+
+                if (rendered >= required) completedCount++;
+
+                list.innerHTML += `
+                    <div class="user-card" style="cursor:pointer;" onclick="openStudentDetailsModal('${s.id}', '${s.full_name}', '${s.email}', '${prof.student_id_number}', ${rendered}, ${required})">
+                        <div class="log-header">
+                            <span style="font-size:11px; font-weight:800; color:var(--emerald-primary);">${s.full_name}</span>
+                            <span class="badge ${rendered >= required ? 'badge-approved' : 'badge-pending'}">${rendered.toFixed(1)} / ${required} hrs</span>
+                        </div>
+                        <div style="font-size:10px; color:var(--text-muted); display:flex; justify-content:space-between;">
+                            <span>ID: <strong>${prof.student_id_number}</strong></span>
+                            <span style="color:var(--emerald-primary); font-weight:700;"><i class="fa-solid fa-eye"></i> View Profile</span>
+                        </div>
+                        <div class="progress-bar-bg" style="margin-top:6px;">
+                            <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('facStatCompletedOjt').innerText = completedCount;
+
+        } catch (e) { showToast("Error loading class analytics.", "error"); }
+    }
+
+    async function openStudentDetailsModal(studentId, name, email, studentNum, rendered, required) {
+        document.getElementById('inspectorStudentName').innerText = name;
+        document.getElementById('inspectorStudentSub').innerText = `ID: ${studentNum} | ${email}`;
+
+        const container = document.getElementById('inspectorContent');
+        container.innerHTML = '<p style="color:var(--text-muted);">Loading student details...<\/p>';
+
+        document.getElementById('studentDetailsModal').style.display = 'flex';
+
+        try {
+            const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?student_id=eq.${studentId}&order=created_at.desc`, { headers });
+            const logs = await logsRes.json();
+
+            const evalRes = await fetch(`${SUPABASE_URL}/evaluations?student_id=eq.${studentId}`, { headers });
+            const evals = await evalRes.json();
+
+            let logsHtml = (Array.isArray(logs) && logs.length > 0) ? logs.map(l => `<li style="margin-bottom:4px;">${new Date(l.created_at).toLocaleDateString()}: <strong>${l.hours_rendered}h</strong> - ${l.task_description} (${l.supervisor_status})</li>`).join('') : '<li>No logs submitted yet.</li>';
+            let evalHtml = (Array.isArray(evals) && evals.length > 0) ? evals.map(ev => `<div><strong>${ev.eval_type}:</strong> ${ev.overall_rating}/5.0 (Punctuality: ${ev.punctuality_score}, Quality: ${ev.quality_of_work_score})</div>`).join('') : '<div>No supervisor evaluations recorded yet.</div>';
+
+            container.innerHTML = `
+                <div class="card" style="padding:10px; margin-bottom:8px;">
+                    <div class="card-title">OJT Progress</div>
+                    <div style="font-size:14px; font-weight:800; color:var(--emerald-primary);">${rendered.toFixed(2)} / ${required} Hours Rendered</div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <strong>Supervisor Performance Rubrics:</strong>
+                    ${evalHtml}
+                </div>
+                <div>
+                    <strong>Recent Daily Logs:</strong>
+                    <ul style="padding-left:16px; margin-top:4px; max-height:120px; overflow-y:auto; font-size:10px;">
+                        ${logsHtml}
+                    </ul>
+                </div>
+            `;
+        } catch (e) { container.innerHTML = '<p style="color:#b91c1c;">Error fetching student logs.<\/p>'; }
+    }
+
+    function closeStudentDetailsModal() {
+        document.getElementById('studentDetailsModal').style.display = 'none';
+    }
+
+    function exportClassSummaryCSV() {
+        if (masterStudentsList.length === 0) { showToast("No student data to export.", "warning"); return; }
+
+        let csvContent = "data:text/csv;charset=utf-8,Full Name,Username,Email,Role\n";
+        masterStudentsList.forEach(s => {
+            csvContent += `"${s.full_name}","${s.username}","${s.email}","${s.role}"\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `WLC_OJT_Class_Progress_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast("Class progress CSV downloaded!", "success");
+    }
+
+    async function loadUserCrudList() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/users?order=created_at.desc`, { headers });
+            const users = await res.json();
+            const list = document.getElementById('userCrudList');
+            if (!list) return;
+
+            list.innerHTML = (!Array.isArray(users) || users.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No users found.<\/p>' : '';
+
+            if (Array.isArray(users)) {
+                users.forEach(u => {
+                    const statusBadge = u.status === 'Active' ? '<span class="badge badge-approved">Active</span>' : '<span class="badge badge-rejected">Suspended</span>';
+                    list.innerHTML += `
+                        <div class="user-card">
+                            <div class="log-header">
+                                <span style="font-size:11px; font-weight:800; color:var(--emerald-primary);">${u.full_name} (${u.username})</span>
+                                ${statusBadge}
+                            </div>
+                            <div style="font-size:10px; color:var(--text-muted); margin-bottom: 6px;">Role: <strong>${u.role}</strong> | ${u.email}</div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-gold" style="flex:1; padding:6px; font-size:10px;" onclick="openEditUserModal('${u.id}', '${u.full_name}', '${u.username}', '${u.email}', '${u.role}', '${u.status}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <button class="btn btn-danger" style="flex:1; padding:6px; font-size:10px;" onclick="deleteUser('${u.id}', '${u.username}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        } catch (err) { showToast("Failed to load users.", "error"); }
+    }
+
+    function openCreateUserModal() {
+        document.getElementById('userModalTitle').innerText = "Create New User Account";
+        document.getElementById('modalUserId').value = "";
+        document.getElementById('userModalForm').reset();
+        document.getElementById('modalPasswordGroup').style.display = "block";
+        document.getElementById('modalPassword').required = true;
+        document.getElementById('userModal').style.display = "flex";
+    }
+
+    function openEditUserModal(id, name, username, email, role, status) {
+        document.getElementById('userModalTitle').innerText = "Edit User Account";
+        document.getElementById('modalUserId').value = id;
+        document.getElementById('modalFullName').value = name;
+        document.getElementById('modalUsername').value = username;
+        document.getElementById('modalEmail').value = email;
+        document.getElementById('modalRole').value = role;
+        document.getElementById('modalStatus').value = status;
+        document.getElementById('modalPasswordGroup').style.display = "none";
+        document.getElementById('modalPassword').required = false;
+        document.getElementById('userModal').style.display = "flex";
+    }
+
+    function closeUserModal() {
+        document.getElementById('userModal').style.display = "none";
+    }
+
+    async function handleSaveUser(e) {
+        e.preventDefault();
+        const id = document.getElementById('modalUserId').value;
+        const full_name = document.getElementById('modalFullName').value.trim();
+        const username = document.getElementById('modalUsername').value.trim();
+        const email = document.getElementById('modalEmail').value.trim();
+        const role = document.getElementById('modalRole').value;
+        const status = document.getElementById('modalStatus').value;
+        const password = document.getElementById('modalPassword').value.trim();
+
+        if (!id && !checkPasswordComplexity(password, 'modal')) {
+            showToast("Password must meet complexity rules!", "error"); return;
+        }
+
+        const payload = { full_name, username, email, role, status };
+        if (password) payload.password = password;
+
+        try {
+            if (id) {
+                await fetch(`${SUPABASE_URL}/users?id=eq.${id}`, { method: 'PATCH', headers, body: JSON.stringify(payload) });
+                await logActivity("USER_UPDATED", `Updated user ${username} (${role})`);
+                showToast("User updated successfully!", "success");
+            } else {
+                await fetch(`${SUPABASE_URL}/users`, { method: 'POST', headers, body: JSON.stringify(payload) });
+                await logActivity("USER_CREATED", `Created user ${username} (${role})`);
+                showToast("User created successfully!", "success");
+            }
+            closeUserModal();
+            loadUserCrudList();
+        } catch (err) { showToast("User save operation failed.", "error"); }
+    }
+
+    async function deleteUser(id, username) {
+        if (!confirm(`Are you sure you want to delete user '${username}'?`)) return;
+        try {
+            await fetch(`${SUPABASE_URL}/users?id=eq.${id}`, { method: 'DELETE', headers });
+            await logActivity("USER_DELETED", `Deleted user ${username}`);
+            showToast("User account deleted.", "success");
+            loadUserCrudList();
+        } catch (err) { showToast("Delete operation failed.", "error"); }
     }
 
     function getAuditBadgeMeta(action) {
@@ -1432,7 +2054,7 @@
 
     async function fetchAndRenderAuditLogs() {
         try {
-            const auditRes = await fetch(`${SUPABASE_URL}/audit_logs?order=created_at.desc&limit=25`, { headers });
+            const auditRes = await fetch(`${SUPABASE_URL}/audit_logs?order=created_at.desc&limit=35`, { headers });
             const audits = await auditRes.json();
             const auditBox = document.getElementById('auditLogList');
 
@@ -1466,9 +2088,7 @@
                     </div>
                 `;
             });
-        } catch (err) {
-            console.error("Audit log error:", err);
-        }
+        } catch (err) { console.error("Audit log error:", err); }
     }
 
     async function approveLog(logId, studentId, hours) {
@@ -1493,9 +2113,14 @@
     }
 
     async function auditDocument(docId, status) {
+        let remarks = "";
+        if (status === 'Needs Revision') {
+            remarks = prompt("Please provide remarks/feedback for requested revision:") || "";
+        }
+
         await fetch(`${SUPABASE_URL}/student_documents?id=eq.${docId}`, {
             method: 'PATCH', headers,
-            body: JSON.stringify({ status })
+            body: JSON.stringify({ status, faculty_remarks: remarks })
         });
         await logActivity("DOC_AUDIT", `Audited document ID ${docId} as ${status}.`);
         showToast(`Document marked as ${status}.`, "success");
@@ -1516,7 +2141,10 @@
         closeModal();
         if (clockInterval) clearInterval(clockInterval);
         if (currentUser) await logActivity("USER_LOGOUT", `User ${currentUser.username} logged out.`);
-        currentUser = null; switchScreen('loginScreen'); showToast("Logged out successfully.", "success");
+        currentUser = null;
+        localStorage.removeItem('intern_session');
+        switchScreen('loginScreen');
+        showToast("Logged out successfully.", "success");
     }
 
     function getBadgeClass(status) {
@@ -1526,6 +2154,14 @@
         if (status === 'Rejected' || status === 'Needs Revision') return 'badge-rejected';
         return '';
     }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedSession = localStorage.getItem('intern_session');
+        if (savedSession) {
+            currentUser = JSON.parse(savedSession);
+            routeUserDashboard();
+        }
+    });
     </script>
 </body>
 </html>
