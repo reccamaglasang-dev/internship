@@ -197,7 +197,7 @@
         }
 
         .admin-sidebar {
-            width: 250px;
+            width: 260px;
             background-color: #ffffff;
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -734,13 +734,33 @@
         <div id="supervisorDashboard" class="screen">
             <div class="dash-nav">
                 <div class="dash-user-name" id="supName">Supervisor Name</div>
-                <div class="dash-user-role">Partner Agency Supervisor</div>
+                <div class="dash-user-role">Partner Agency Host Supervisor</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-num" id="supStatTotalInterns">0</div>
+                    <div class="stat-card-label">Active Interns</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-num" id="supStatPendingLogs" style="color: #d97706;">0</div>
+                    <div class="stat-card-label">Pending Logs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-num" id="supStatAvgScore" style="color: #22c55e;">5.0</div>
+                    <div class="stat-card-label">Avg Rating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-num" id="supStatIncidents" style="color: #dc2626;">0</div>
+                    <div class="stat-card-label">Incident Flags</div>
+                </div>
             </div>
 
             <div class="tab-bar">
                 <button class="tab-btn active" onclick="switchSubTab('supervisor', 'verifyLogsTab', event)"><i class="fa-solid fa-user-check"></i> Verifications</button>
                 <button class="tab-btn" onclick="switchSubTab('supervisor', 'rosterTab', event)"><i class="fa-solid fa-address-book"></i> Intern Roster</button>
                 <button class="tab-btn" onclick="switchSubTab('supervisor', 'evalTab', event)"><i class="fa-solid fa-star"></i> Performance</button>
+                <button class="tab-btn" onclick="switchSubTab('supervisor', 'incidentsTab', event)"><i class="fa-solid fa-triangle-exclamation"></i> Incidents</button>
                 <button class="tab-btn" onclick="switchSubTab('supervisor', 'evalHistoryTab', event)"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
             </div>
 
@@ -761,7 +781,7 @@
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
                     <input type="text" class="search-input" placeholder="Search assigned interns..." onkeyup="filterContainer(this.value, 'supervisorRosterList')">
                 </div>
-                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-users"></i> Assigned Student Interns</div>
+                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-users"></i> Assigned Student Interns & Progress</div>
                 <div id="supervisorRosterList" style="flex: 1;"></div>
             </div>
 
@@ -798,9 +818,42 @@
                                 <input type="number" id="scoreComm" class="form-input" min="1" max="5" value="5" required>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Qualitative Remarks & Feedback</label>
+                            <textarea id="evalRemarksInput" class="form-input" placeholder="Provide constructive feedback or note key strengths..." style="height: 50px;"></textarea>
+                        </div>
                         <button type="submit" class="btn btn-primary btn-block" style="padding: 10px;"><i class="fa-solid fa-award"></i> Submit Evaluation</button>
                     </form>
                 </div>
+            </div>
+
+            <div id="supIncidentsTab" class="subtab-panel" style="display: none;">
+                <div class="card" style="border-left-color: #dc2626;">
+                    <div class="card-title">Submit Incident / Commendation Flag</div>
+                    <form onsubmit="submitSupervisorIncident(event)" style="margin-top: 8px;">
+                        <div class="form-group">
+                            <label class="form-label">Select Student</label>
+                            <select id="incidentStudentSelect" class="form-input" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Report Category</label>
+                            <select id="incidentCategorySelect" class="form-input" required>
+                                <option value="Unexcused Absence">Unexcused Absence</option>
+                                <option value="Repeated Tardiness">Repeated Tardiness</option>
+                                <option value="Policy Violation">Company Policy Violation</option>
+                                <option value="Commendation">Exceptional Performance / Commendation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Incident Details / Description</label>
+                            <textarea id="incidentDetailsInput" class="form-input" placeholder="Describe what occurred, dates, or details for Faculty Coordinator review..." required style="height: 60px;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger btn-block" style="padding: 10px;"><i class="fa-solid fa-paper-plane"></i> Dispatch Report to Faculty</button>
+                    </form>
+                </div>
+
+                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-list-check"></i> Filed Incident Logs</div>
+                <div id="supervisorIncidentList" style="flex: 1;"></div>
             </div>
 
             <div id="supEvalHistoryTab" class="subtab-panel" style="display: none;">
@@ -842,7 +895,10 @@
                     <i class="fa-solid fa-chart-pie"></i> Class Analytics & Roster
                 </div>
                 <div class="admin-nav-item" onclick="switchAdminWebTab('docs', event)">
-                    <i class="fa-solid fa-folder-open"></i> Document Audits
+                    <i class="fa-solid fa-folder-open"></i> Document Audits & Compliance
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminWebTab('incidents', event)">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Incident Desk & Escalations
                 </div>
                 <div class="admin-nav-item" onclick="switchAdminWebTab('users', event)">
                     <i class="fa-solid fa-users-gear"></i> User Management (CRUD)
@@ -856,8 +912,11 @@
                 
                 <div id="adminTabApprovals" class="admin-tab-content active">
                     <div class="admin-card">
-                        <div style="font-size: 14px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 12px; text-transform: uppercase;">
-                            <i class="fa-solid fa-user-check"></i> Verified OJT Logs Awaiting Final Faculty Approval
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--emerald-primary); text-transform: uppercase;">
+                                <i class="fa-solid fa-user-check"></i> Verified OJT Logs Awaiting Final Faculty Approval
+                            </div>
+                            <button class="btn btn-gold" onclick="batchApproveFacultyLogs()"><i class="fa-solid fa-check-double"></i> Batch Approve All Verified Logs</button>
                         </div>
                         <div id="webFacultyLogList"></div>
                     </div>
@@ -896,6 +955,16 @@
                             <i class="fa-solid fa-file-circle-check"></i> Pre-OJT Mandatory Documents Submitted for Audit
                         </div>
                         <div id="webFacultyDocsList"></div>
+                    </div>
+                </div>
+
+                <!-- Incident Desk & Escalation Tab -->
+                <div id="adminTabIncidents" class="admin-tab-content">
+                    <div class="admin-card">
+                        <div style="font-size: 14px; font-weight: 800; color: #b91c1c; margin-bottom: 12px; text-transform: uppercase;">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Host Agency Incident & Escalation Feed
+                        </div>
+                        <div id="webAdminIncidentFeed"></div>
                     </div>
                 </div>
 
@@ -1101,6 +1170,9 @@
         } else if (tabName === 'docs') {
             document.getElementById('adminTabDocs').classList.add('active');
             loadFacultyDashboard();
+        } else if (tabName === 'incidents') {
+            document.getElementById('adminTabIncidents').classList.add('active');
+            loadAdminIncidentsDesk();
         } else if (tabName === 'users') {
             document.getElementById('adminTabUsers').classList.add('active');
             loadUserCrudList();
@@ -1122,10 +1194,12 @@
             setTabVisible('supVerifyLogsTab', tabName === 'verifyLogsTab');
             setTabVisible('supRosterTab', tabName === 'rosterTab');
             setTabVisible('supEvalTab', tabName === 'evalTab');
+            setTabVisible('supIncidentsTab', tabName === 'incidentsTab');
             setTabVisible('supEvalHistoryTab', tabName === 'evalHistoryTab');
 
             if (tabName === 'verifyLogsTab') loadSupervisorDashboard();
             if (tabName === 'rosterTab') loadSupervisorRoster();
+            if (tabName === 'incidentsTab') loadSupervisorIncidents();
             if (tabName === 'evalHistoryTab') loadSupervisorEvalHistory();
         }
 
@@ -1398,7 +1472,7 @@
             const users = await userRes.json();
             const user = users[0];
 
-            await fetch(`${SUPABASE_URL}/users?id=eq.${user.id}`, {
+            await fetch(`${SUPABASE_URL}/users?id=eq.${encodeURIComponent(email)}`, {
                 method: 'PATCH', headers,
                 body: JSON.stringify({ password: newPassword, failed_attempts: 0, lockout_until: null })
             });
@@ -1796,16 +1870,82 @@
 
             const stdRes = await fetch(`${SUPABASE_URL}/users?or=(role.eq.Student,role.eq.student)`, { headers });
             const students = await stdRes.json();
-            const select = document.getElementById('evalStudentSelect');
-            if (select) {
-                select.innerHTML = '<option value="">-- Select Student Intern --</option>';
-                if (Array.isArray(students) && students.length > 0) {
-                    students.forEach(s => { 
-                        select.innerHTML += `<option value="${s.id}">${s.full_name || s.username} (${s.username})</option>`; 
-                    });
-                }
+            
+            const numStudents = Array.isArray(students) ? students.length : 0;
+            const numPending = Array.isArray(logs) ? logs.length : 0;
+
+            document.getElementById('supStatTotalInterns').innerText = numStudents;
+            document.getElementById('supStatPendingLogs').innerText = numPending;
+
+            const evalsRes = await fetch(`${SUPABASE_URL}/evaluations`, { headers });
+            const evals = await evalsRes.json();
+            if (Array.isArray(evals) && evals.length > 0) {
+                const totalRating = evals.reduce((acc, curr) => acc + parseFloat(curr.overall_rating || 5), 0);
+                document.getElementById('supStatAvgScore').innerText = (totalRating / evals.length).toFixed(1);
             }
+
+            const incRes = await fetch(`${SUPABASE_URL}/audit_logs?action=eq.INCIDENT_FLAGGED`, { headers });
+            const incidents = await incRes.json();
+            if (Array.isArray(incidents)) {
+                document.getElementById('supStatIncidents').innerText = incidents.length;
+            }
+
+            const selectEval = document.getElementById('evalStudentSelect');
+            const selectInc = document.getElementById('incidentStudentSelect');
+            
+            const studentOptions = '<option value="">-- Select Student Intern --</option>' + 
+                (Array.isArray(students) ? students.map(s => `<option value="${s.id}">${s.full_name || s.username} (${s.username})</option>`).join('') : '');
+            
+            if (selectEval) selectEval.innerHTML = studentOptions;
+            if (selectInc) selectInc.innerHTML = studentOptions;
+
         } catch (err) { console.error("Supervisor dashboard error:", err); }
+    }
+
+    async function submitSupervisorIncident(e) {
+        e.preventDefault();
+        const studentId = document.getElementById('incidentStudentSelect').value;
+        const category = document.getElementById('incidentCategorySelect').value;
+        const details = document.getElementById('incidentDetailsInput').value.trim();
+
+        if (!studentId) { showToast("Please select a student intern.", "error"); return; }
+
+        const studentName = await getUserFullName(studentId);
+
+        await logActivity("INCIDENT_FLAGGED", `Supervisor ${currentUser.full_name} reported [${category}] for ${studentName}: "${details}"`);
+
+        showToast(`Report [${category}] logged & sent to Faculty!`, "success");
+        document.getElementById('incidentDetailsInput').value = '';
+        loadSupervisorIncidents();
+        loadSupervisorDashboard();
+    }
+
+    async function loadSupervisorIncidents() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/audit_logs?action=eq.INCIDENT_FLAGGED&order=created_at.desc`, { headers });
+            const reports = await res.json();
+            const list = document.getElementById('supervisorIncidentList');
+            if (!list) return;
+
+            list.innerHTML = (!Array.isArray(reports) || reports.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No incidents or commendations logged.</p>' : '';
+
+            if (Array.isArray(reports)) {
+                reports.forEach(r => {
+                    list.innerHTML += `
+                        <div class="audit-card">
+                            <div class="audit-card-strip" style="background: #dc2626;"></div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span class="audit-tag" style="color: #b91c1c; background: #fee2e2;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> INCIDENT REPORT
+                                </span>
+                                <span class="audit-time">${new Date(r.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div class="audit-details-text">${r.details}</div>
+                        </div>
+                    `;
+                });
+            }
+        } catch (e) { console.error("Incident load error:", e); }
     }
 
     async function batchVerifyLogs() {
@@ -1935,6 +2075,7 @@
         const quality_of_work_score = parseInt(document.getElementById('scoreQuality').value) || 5;
         const professionalism_score = parseInt(document.getElementById('scorePro').value) || 5;
         const communication_score = parseInt(document.getElementById('scoreComm').value) || 5;
+        const remarks = document.getElementById('evalRemarksInput').value.trim();
 
         const overall_rating = parseFloat(((punctuality_score + quality_of_work_score + professionalism_score + communication_score) / 4).toFixed(2));
 
@@ -1947,8 +2088,9 @@
 
             if (!response.ok) { showToast("Failed to save evaluation to database.", "error"); return; }
 
-            await logActivity("EVALUATION_SUBMIT", `Submitted ${eval_type} evaluation for student ID ${student_id}.`);
+            await logActivity("EVALUATION_SUBMIT", `Submitted ${eval_type} evaluation for student ID ${student_id}. Rating: ${overall_rating}. Remarks: ${remarks}`);
             showToast(`Evaluation submitted! Rating: ${overall_rating}/5.0`, "success");
+            document.getElementById('evalRemarksInput').value = '';
 
         } catch (err) { showToast("Connection error while submitting evaluation.", "error"); }
     }
@@ -2006,6 +2148,64 @@
             loadUserCrudList();
             fetchAndRenderAuditLogs();
         } catch (err) { console.error("Faculty dashboard error:", err); }
+    }
+
+    async function batchApproveFacultyLogs() {
+        try {
+            const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?supervisor_status=eq.Verified&faculty_status=eq.Pending`, { headers });
+            const verifiedLogs = await logsRes.json();
+
+            if (!Array.isArray(verifiedLogs) || verifiedLogs.length === 0) {
+                showToast("No verified logs awaiting faculty approval.", "warning"); return;
+            }
+
+            if (!confirm(`Grant final faculty approval for all ${verifiedLogs.length} logs?`)) return;
+
+            for (const log of verifiedLogs) {
+                await approveLog(log.id, log.student_id, log.hours_rendered);
+            }
+
+            showToast(`Batch approved ${verifiedLogs.length} student shift logs!`, "success");
+            loadFacultyDashboard();
+
+        } catch (e) { showToast("Batch faculty approval failed.", "error"); }
+    }
+
+    async function loadAdminIncidentsDesk() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/audit_logs?action=eq.INCIDENT_FLAGGED&order=created_at.desc`, { headers });
+            const reports = await res.json();
+            const feed = document.getElementById('webAdminIncidentFeed');
+            if (!feed) return;
+
+            feed.innerHTML = (!Array.isArray(reports) || reports.length === 0) ? '<p style="font-size:12px; color:var(--text-muted); padding:10px;">No incidents flagged by supervisors.</p>' : '';
+
+            if (Array.isArray(reports)) {
+                reports.forEach(r => {
+                    feed.innerHTML += `
+                        <div class="log-item" style="border-left:4px solid #dc2626; display:flex; justify-content:space-between; align-items:center;">
+                            <div style="flex:1;">
+                                <div style="font-size:13px; font-weight:800; color:#b91c1c;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Host Agency Flag &bull; ${new Date(r.created_at).toLocaleDateString()}
+                                </div>
+                                <div style="font-size:12px; color:var(--text-dark); margin-top:4px;">${r.details}</div>
+                                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Filed by Supervisor: <strong>${r.username}</strong></div>
+                            </div>
+                            <button class="btn btn-primary" style="padding:8px 14px; font-size:11px;" onclick="resolveIncidentAction('${r.id}')"><i class="fa-solid fa-gavel"></i> Log Action Taken</button>
+                        </div>
+                    `;
+                });
+            }
+        } catch (e) { console.error("Admin incident feed error:", e); }
+    }
+
+    async function resolveIncidentAction(incidentId) {
+        const action = prompt("Specify counseling action or advisory issued to student/agency:");
+        if (!action) return;
+
+        await logActivity("FACULTY_INCIDENT_ACTION", `Faculty Coordinator recorded action for report ${incidentId}: "${action}"`);
+        showToast("Action officially recorded in student OJT file.", "success");
+        loadAdminIncidentsDesk();
     }
 
     async function loadFacultyClassAnalytics() {
@@ -2225,6 +2425,8 @@
                 return { color: '#475569', bg: '#f1f5f9', icon: 'fa-right-from-bracket', border: '#64748b' };
             case 'OJT_LOG_SUBMIT':
                 return { color: '#b45309', bg: '#fef3c7', icon: 'fa-clock-rotate-left', border: '#f59e0b' };
+            case 'INCIDENT_FLAGGED':
+                return { color: '#b91c1c', bg: '#fee2e2', icon: 'fa-triangle-exclamation', border: '#dc2626' };
             default:
                 return { color: '#334155', bg: '#f1f5f9', icon: 'fa-shield-halved', border: '#64748b' };
         }
