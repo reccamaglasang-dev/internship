@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WLC InternTrack - Mobile Internship System</title>
+    <title>WLC InternTrack - Internship System</title>
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     
@@ -37,17 +37,21 @@
             --border-color: #334155;
             --shadow-soft: 0 12px 32px -8px rgba(0, 0, 0, 0.5);
         }
-        body.dark-mode .mobile-frame {
-            background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+        body.dark-mode .mobile-frame, body.dark-mode .admin-web-container {
+            background: #0f172a;
             border-color: #334155;
         }
-        body.dark-mode .log-item, body.dark-mode .audit-card, body.dark-mode .user-card, body.dark-mode .tab-bar {
+        body.dark-mode .log-item, body.dark-mode .audit-card, body.dark-mode .user-card, body.dark-mode .tab-bar, body.dark-mode .admin-card {
             background: #1e293b;
             border-color: #334155;
         }
         body.dark-mode .form-input {
             background-color: #0f172a;
             color: #f8fafc;
+            border-color: #334155;
+        }
+        body.dark-mode .admin-sidebar {
+            background-color: #020617;
             border-color: #334155;
         }
 
@@ -59,7 +63,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -73,11 +77,12 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 12px;
+            padding: 0;
             overflow-x: hidden;
             transition: background 0.3s ease;
         }
 
+        /* MOBILE FRAME (STUDENT & SUPERVISOR) */
         .mobile-frame {
             width: 100%;
             max-width: 420px;
@@ -95,6 +100,7 @@
             flex-direction: column;
             position: relative;
             transition: all 0.3s ease;
+            margin: auto;
         }
 
         .phone-notch-bar {
@@ -137,17 +143,141 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
+        /* DESKTOP WEB ADMIN PORTAL (FACULTY & ADMIN) */
+        .admin-web-container {
+            width: 100vw;
+            height: 100vh;
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 200;
+        }
+
+        .admin-topbar {
+            height: 64px;
+            background: linear-gradient(90deg, var(--emerald-primary) 0%, var(--emerald-surface) 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-brand i {
+            font-size: 24px;
+            color: var(--gold-bright);
+        }
+
+        .admin-top-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .admin-main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 16px 12px;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .admin-nav-item:hover {
+            background-color: rgba(16, 78, 58, 0.08);
+            color: var(--emerald-primary);
+        }
+
+        .admin-nav-item.active {
+            background: linear-gradient(135deg, var(--emerald-primary) 0%, var(--emerald-surface) 100%);
+            color: var(--gold-bright);
+            box-shadow: 0 4px 12px var(--emerald-glow);
+        }
+
+        .admin-content-area {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            background-color: rgba(248, 250, 252, 0.8);
+        }
+
+        body.dark-mode .admin-content-area {
+            background-color: #0f172a;
+        }
+
+        .admin-tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .admin-tab-content.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .admin-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+        }
+
+        .admin-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
         .subtab-panel {
             display: flex;
             flex-direction: column;
             flex: 1;
             overflow-y: auto;
-            animation: subtabSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes subtabSlide {
-            from { opacity: 0; transform: translateX(16px); }
-            to { opacity: 1; transform: translateX(0); }
         }
 
         .app-header { text-align: center; margin-top: 6px; margin-bottom: 14px; }
@@ -164,9 +294,9 @@
         body.dark-mode .app-title { color: var(--gold-bright); }
         .app-subtitle { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
-        .toast-container { position: absolute; top: 38px; left: 50%; transform: translateX(-50%); width: 88%; z-index: 1000; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; max-width: 360px; }
         .toast {
-            padding: 12px 16px; border-radius: 16px; font-size: 12px; font-weight: 700; display: none;
+            padding: 12px 18px; border-radius: 16px; font-size: 12px; font-weight: 700; display: none;
             box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2); animation: toastPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             backdrop-filter: blur(8px);
         }
@@ -195,16 +325,16 @@
             background: var(--bg-card); border-radius: 14px; padding: 10px 12px;
             border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
-        .stat-card-num { font-size: 16px; font-weight: 800; color: var(--emerald-primary); }
+        .stat-card-num { font-size: 18px; font-weight: 800; color: var(--emerald-primary); }
         body.dark-mode .stat-card-num { color: var(--gold-bright); }
-        .stat-card-label { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .stat-card-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
 
         .search-wrapper { position: relative; margin-bottom: 10px; }
         .search-input {
-            width: 100%; padding: 8px 12px 8px 32px; border: 1.5px solid var(--border-color);
-            border-radius: 12px; font-size: 11px; background: var(--bg-input); color: var(--text-dark); outline: none;
+            width: 100%; padding: 10px 12px 10px 36px; border: 1.5px solid var(--border-color);
+            border-radius: 12px; font-size: 12px; background: var(--bg-input); color: var(--text-dark); outline: none;
         }
-        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text-muted); }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--text-muted); }
 
         .form-group { margin-bottom: 12px; }
         .form-label { display: block; font-size: 10px; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
@@ -217,10 +347,11 @@
         .toggle-pw { position: absolute; right: 12px; cursor: pointer; color: var(--text-muted); font-size: 13px; z-index: 10; }
 
         .btn {
-            width: 100%; padding: 11px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; border: none;
-            display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            flex-shrink: 0; letter-spacing: 0.2px;
+            padding: 11px 16px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; border: none;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            letter-spacing: 0.2px; text-decoration: none;
         }
+        .btn-block { width: 100%; }
         .btn:active { transform: translateY(2px) scale(0.98); }
         .btn-primary { background: linear-gradient(135deg, var(--emerald-primary) 0%, var(--emerald-surface) 100%); color: #ffffff; box-shadow: 0 6px 16px var(--emerald-glow); }
         .btn-danger { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.2); }
@@ -264,29 +395,29 @@
             border: 1px solid rgba(251, 191, 36, 0.3); box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8); letter-spacing: 2px;
         }
 
-        .badge { padding: 3px 8px; border-radius: 10px; font-size: 9px; font-weight: 800; display: inline-block; }
+        .badge { padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: 800; display: inline-block; }
         .badge-pending { background-color: #fef3c7; color: #b45309; border: 1px solid #fde047; }
         .badge-verified { background-color: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
         .badge-approved { background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; }
         .badge-rejected { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
 
         .log-item, .user-card {
-            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px;
-            margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px;
+            margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
-        .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .log-desc { font-size: 11px; color: var(--text-dark); margin-bottom: 4px; line-height: 1.4; font-weight: 500; }
+        .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .log-desc { font-size: 12px; color: var(--text-dark); margin-bottom: 6px; line-height: 1.4; font-weight: 500; }
 
-        .audit-container { flex: 1; overflow-y: auto; padding: 2px; margin-bottom: 10px; }
+        .audit-container { flex: 1; overflow-y: auto; padding: 2px; }
         .audit-card {
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px;
-            padding: 10px 12px; margin-bottom: 8px; position: relative; overflow: hidden;
+            padding: 12px 14px; margin-bottom: 10px; position: relative; overflow: hidden;
         }
         .audit-card-strip { position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
-        .audit-tag { font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; }
-        .audit-user { font-size: 10px; font-weight: 700; color: var(--text-dark); }
-        .audit-time { font-size: 9px; font-weight: 600; color: var(--text-muted); }
-        .audit-details-text { font-size: 10px; color: var(--text-dark); margin-top: 4px; line-height: 1.4; }
+        .audit-tag { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; }
+        .audit-user { font-size: 11px; font-weight: 700; color: var(--text-dark); }
+        .audit-time { font-size: 10px; font-weight: 600; color: var(--text-muted); }
+        .audit-details-text { font-size: 11px; color: var(--text-dark); margin-top: 4px; line-height: 1.4; }
 
         .otp-banner {
             background: linear-gradient(135deg, #fef3c7 0%, #fde047 100%);
@@ -295,12 +426,12 @@
         }
 
         .modal-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: rgba(6, 10, 18, 0.8); backdrop-filter: blur(8px); display: none;
-            align-items: center; justify-content: center; padding: 20px; z-index: 500;
+            align-items: center; justify-content: center; padding: 20px; z-index: 1000;
         }
         .modal-card {
-            background-color: var(--bg-card); border-radius: 24px; padding: 20px; width: 92%; max-width: 340px;
+            background-color: var(--bg-card); border-radius: 24px; padding: 24px; width: 92%; max-width: 440px;
             text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); border: 1px solid var(--border-color);
             max-height: 85vh; overflow-y: auto;
         }
@@ -312,9 +443,17 @@
 </head>
 <body>
 
-    <div class="mobile-frame">
+    <!-- Toast Notifications -->
+    <div class="toast-container">
+        <div id="toastBox" class="toast"></div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 1. MOBILE APP CONTAINER (STUDENTS & SUPERVISORS)                          -->
+    <!-- ========================================================================= -->
+    <div id="mobileAppFrame" class="mobile-frame">
         
-        <!-- Notch Header with Dark Mode Switcher -->
+        <!-- Notch Header -->
         <div class="phone-notch-bar">
             <span>9:41</span>
             <div class="notch-pill"></div>
@@ -325,12 +464,7 @@
             </div>
         </div>
 
-        <!-- Toast Notifications -->
-        <div class="toast-container">
-            <div id="toastBox" class="toast"></div>
-        </div>
-
-        <!-- 1. LOGIN SCREEN -->
+        <!-- 1.1 LOGIN SCREEN -->
         <div id="loginScreen" class="screen active">
             <div class="app-header">
                 <div class="logo-wrapper">
@@ -340,7 +474,7 @@
                 <div class="app-subtitle">Western Leyte College of Ormoc</div>
             </div>
 
-            <!-- Progressive Lockout Counter Banner -->
+            <!-- Lockout Counter Banner -->
             <div id="lockoutBanner" style="display: none; background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; padding: 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 12px;">
                 <i class="fa-solid fa-lock"></i> Account temporarily locked. Try again in <span id="lockoutTimerSeconds">30</span>s.
             </div>
@@ -359,7 +493,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> Sign In to Portal</button>
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> Sign In to Portal</button>
             </form>
 
             <div style="text-align: right; margin-top: 8px;">
@@ -380,7 +514,7 @@
             </div>
         </div>
 
-        <!-- 2. REGISTRATION SCREEN -->
+        <!-- 1.2 REGISTRATION SCREEN -->
         <div id="registerScreen" class="screen">
             <div class="app-header">
                 <div class="app-title" style="font-size: 16px;">Create Account</div>
@@ -436,7 +570,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Complete Registration</button>
+                <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-user-plus"></i> Complete Registration</button>
             </form>
 
             <div class="auth-link">
@@ -444,14 +578,13 @@
             </div>
         </div>
 
-        <!-- 3. OTP PASSWORD RECOVERY SCREEN -->
+        <!-- 1.3 OTP RECOVERY SCREEN -->
         <div id="forgotPasswordScreen" class="screen">
             <div class="app-header">
                 <div class="app-title" style="font-size: 16px;">OTP Password Recovery</div>
                 <div class="app-subtitle">Database Connected Verification</div>
             </div>
 
-            <!-- OTP Simulator Copy Banner -->
             <div id="otpSimulatorBox" style="display: none;" class="otp-banner">
                 <div><i class="fa-solid fa-key"></i> <strong>OTP GENERATED & STORED IN DATABASE</strong></div>
                 <div style="margin: 6px 0; font-size: 14px; font-family: 'JetBrains Mono', monospace; font-weight: 800;" id="generatedOtpCodeDisplay">------</div>
@@ -463,7 +596,7 @@
                     <label class="form-label">Registered Account Email</label>
                     <input type="email" id="otpEmailInput" class="form-input" placeholder="Enter registered email" required>
                 </div>
-                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send OTP Code</button>
+                <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Send OTP Code</button>
             </form>
 
             <form id="otpVerifyForm" onsubmit="handleVerifyOTPAndReset(event)" style="display: none; margin-top: 12px;">
@@ -495,7 +628,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success"><i class="fa-solid fa-key"></i> Reset Password & Sign In</button>
+                <button type="submit" class="btn btn-success btn-block"><i class="fa-solid fa-key"></i> Reset Password & Sign In</button>
             </form>
 
             <div class="auth-link">
@@ -503,14 +636,13 @@
             </div>
         </div>
 
-        <!-- 4. STUDENT DASHBOARD -->
+        <!-- 1.4 STUDENT DASHBOARD -->
         <div id="studentDashboard" class="screen">
             <div class="dash-nav">
                 <div class="dash-user-name" id="stdName">Student Name</div>
                 <div class="dash-user-role" id="stdRoleSubtitle">BSIT Student Intern &bull; WLC Ormoc</div>
             </div>
 
-            <!-- Analytics Widgets -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-card-num" id="statCompletedHours">0.0</div>
@@ -527,7 +659,6 @@
                 <button class="tab-btn" onclick="switchSubTab('student', 'docsTab', event)"><i class="fa-solid fa-file-lines"></i> Documents</button>
             </div>
 
-            <!-- TAB 1: CLOCK & LOGS -->
             <div id="studentClockTab" class="subtab-panel">
                 <div class="card">
                     <div class="card-title">OJT Progress Tracker</div>
@@ -546,7 +677,7 @@
                         <i class="fa-solid fa-location-dot" style="color: #22c55e;"></i> Location: WLC Campus / Agency Verified
                     </div>
                     
-                    <button type="button" id="clockBtn" class="btn btn-success" style="margin-bottom: 8px;" onclick="handleClockPunch()"><i class="fa-solid fa-play"></i> Start GPS Punch Timer</button>
+                    <button type="button" id="clockBtn" class="btn btn-success btn-block" style="margin-bottom: 8px;" onclick="handleClockPunch()"><i class="fa-solid fa-play"></i> Start GPS Punch Timer</button>
                     
                     <form id="taskForm" onsubmit="submitDailyLog(event)" style="display: block; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-color);">
                         <div class="form-group">
@@ -557,14 +688,12 @@
                             <label class="form-label">Work Summary / Accomplishments</label>
                             <textarea id="logTask" class="form-input" placeholder="Describe tasks completed during this shift..." required style="height: 55px;"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Daily Log</button>
+                        <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Submit Daily Log</button>
                     </form>
                 </div>
 
-                <!-- DTR Printable Report Generator Button -->
-                <button type="button" class="btn btn-gold" style="margin-bottom: 10px;" onclick="generatePrintableDTR()"><i class="fa-solid fa-file-pdf"></i> Export Official WLC DTR Sheet</button>
+                <button type="button" class="btn btn-gold btn-block" style="margin-bottom: 10px;" onclick="generatePrintableDTR()"><i class="fa-solid fa-file-pdf"></i> Export Official WLC DTR Sheet</button>
 
-                <!-- Live Search Bar -->
                 <div class="search-wrapper">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
                     <input type="text" class="search-input" placeholder="Search daily entries..." onkeyup="filterContainer(this.value, 'studentLogList')">
@@ -574,7 +703,6 @@
                 <div id="studentLogList" style="flex: 1;"></div>
             </div>
 
-            <!-- TAB 2: DOCUMENTS -->
             <div id="studentDocsTab" class="subtab-panel" style="display: none;">
                 <div class="card" style="border-left-color: var(--gold-bright);">
                     <div class="card-title">Upload Mandatory Document</div>
@@ -591,7 +719,7 @@
                         <div class="form-group">
                             <input type="text" id="docUrlInput" class="form-input" placeholder="File Link or Drive URL (e.g. https://...)" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="padding: 10px;"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Document</button>
+                        <button type="submit" class="btn btn-primary btn-block" style="padding: 10px;"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Document</button>
                     </form>
                 </div>
 
@@ -599,10 +727,10 @@
                 <div id="studentDocsList" style="flex: 1;"></div>
             </div>
 
-            <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            <button class="btn btn-danger btn-block" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
 
-        <!-- 5. ENHANCED SUPERVISOR DASHBOARD -->
+        <!-- 1.5 SUPERVISOR DASHBOARD -->
         <div id="supervisorDashboard" class="screen">
             <div class="dash-nav">
                 <div class="dash-user-name" id="supName">Supervisor Name</div>
@@ -616,7 +744,6 @@
                 <button class="tab-btn" onclick="switchSubTab('supervisor', 'evalHistoryTab', event)"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
             </div>
 
-            <!-- SUBTAB 1: LOG VERIFICATIONS WITH BATCH APPROVAL -->
             <div id="supVerifyLogsTab" class="subtab-panel">
                 <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 8px;">
                     <div class="search-wrapper" style="flex: 1; margin-bottom: 0;">
@@ -629,7 +756,6 @@
                 <div id="supervisorLogList" style="flex: 1;"></div>
             </div>
 
-            <!-- SUBTAB 2: INTERN ROSTER VIEW -->
             <div id="supRosterTab" class="subtab-panel" style="display: none;">
                 <div class="search-wrapper">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -639,7 +765,6 @@
                 <div id="supervisorRosterList" style="flex: 1;"></div>
             </div>
 
-            <!-- SUBTAB 3: EVALUATION FORM -->
             <div id="supEvalTab" class="subtab-panel" style="display: none;">
                 <div class="card">
                     <div class="card-title">Submit Student Performance Rubric</div>
@@ -673,176 +798,215 @@
                                 <input type="number" id="scoreComm" class="form-input" min="1" max="5" value="5" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="padding: 10px;"><i class="fa-solid fa-award"></i> Submit Evaluation</button>
+                        <button type="submit" class="btn btn-primary btn-block" style="padding: 10px;"><i class="fa-solid fa-award"></i> Submit Evaluation</button>
                     </form>
                 </div>
             </div>
 
-            <!-- SUBTAB 4: EVALUATION HISTORY -->
             <div id="supEvalHistoryTab" class="subtab-panel" style="display: none;">
                 <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-history"></i> Submitted Performance Rubrics</div>
                 <div id="supervisorEvalHistoryList" style="flex: 1;"></div>
             </div>
 
-            <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-        </div>
-
-        <!-- 6. ENHANCED FACULTY & ADMIN DASHBOARD -->
-        <div id="facultyDashboard" class="screen">
-            <div class="dash-nav">
-                <div class="dash-user-name" id="facName">Faculty Coordinator</div>
-                <div class="dash-user-role" id="facRoleSubtitle">WLC OJT Adviser & Admin</div>
-            </div>
-
-            <div class="tab-bar">
-                <button class="tab-btn active" onclick="switchSubTab('faculty', 'facLogsTab', event)"><i class="fa-solid fa-square-check"></i> Approvals</button>
-                <button class="tab-btn" onclick="switchSubTab('faculty', 'facAnalyticsTab', event)"><i class="fa-solid fa-chart-pie"></i> Analytics</button>
-                <button class="tab-btn" onclick="switchSubTab('faculty', 'facDocsTab', event)"><i class="fa-solid fa-folder-open"></i> Docs</button>
-                <button class="tab-btn" onclick="switchSubTab('faculty', 'facUserCrudTab', event)"><i class="fa-solid fa-users-gear"></i> Users</button>
-                <button class="tab-btn" onclick="switchSubTab('faculty', 'facAuditTab', event)"><i class="fa-solid fa-shield-halved"></i> Audit</button>
-            </div>
-
-            <!-- SUBTAB 1: LOG APPROVALS -->
-            <div id="facLogsTab" class="subtab-panel">
-                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;">Verified Logs Awaiting Final Approval</div>
-                <div id="facultyLogList" style="flex: 1;"></div>
-            </div>
-
-            <!-- SUBTAB 2: CLASS ANALYTICS & MASTER ROSTER -->
-            <div id="facAnalyticsTab" class="subtab-panel" style="display: none;">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-card-num" id="facStatTotalStudents">0</div>
-                        <div class="stat-card-label">Active Interns</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-card-num" id="facStatCompletedOjt">0</div>
-                        <div class="stat-card-label">Completed OJTs</div>
-                    </div>
-                </div>
-
-                <button class="btn btn-gold" style="margin-bottom: 10px; padding: 8px;" onclick="exportClassSummaryCSV()"><i class="fa-solid fa-file-csv"></i> Export Class Progress CSV</button>
-
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search class progress..." onkeyup="filterContainer(this.value, 'facultyClassMasterList')">
-                </div>
-
-                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;"><i class="fa-solid fa-graduation-cap"></i> Student Master Class Progress</div>
-                <div id="facultyClassMasterList" style="flex: 1;"></div>
-            </div>
-
-            <!-- SUBTAB 3: DOCUMENT AUDITS -->
-            <div id="facDocsTab" class="subtab-panel" style="display: none;">
-                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;">Pre-OJT Documents Submitted for Audit</div>
-                <div id="facultyDocsList" style="flex: 1;"></div>
-            </div>
-
-            <!-- SUBTAB 4: USER CRUD MODULE -->
-            <div id="facUserCrudTab" class="subtab-panel" style="display: none;">
-                <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-                    <div class="search-wrapper" style="flex: 1; margin-bottom: 0;">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Search system users..." onkeyup="filterContainer(this.value, 'userCrudList')">
-                    </div>
-                    <button class="btn btn-primary" style="width: auto; padding: 0 10px;" onclick="openCreateUserModal()"><i class="fa-solid fa-user-plus"></i> Add</button>
-                </div>
-
-                <div id="userCrudList" style="flex: 1; overflow-y: auto;"></div>
-            </div>
-
-            <!-- SUBTAB 5: LOG TRAIL / SYSTEM AUDIT MODULE -->
-            <div id="facAuditTab" class="subtab-panel" style="display: none;">
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search system audit events..." onkeyup="filterContainer(this.value, 'auditLogList')">
-                </div>
-                <div style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 6px; text-transform: uppercase;">
-                    <i class="fa-solid fa-shield-halved"></i> System Audit Trail
-                </div>
-                <div id="auditLogList" class="audit-container"></div>
-            </div>
-
-            <button class="btn btn-danger" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-        </div>
-
-        <!-- 7. LOGOUT MODAL -->
-        <div id="logoutModal" class="modal-overlay">
-            <div class="modal-card">
-                <div style="font-size: 16px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px;">Confirm Logout</div>
-                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">Are you sure you want to sign out of WLC InternTrack?</p>
-                <div style="display: flex; gap: 8px; width: 100%;">
-                    <button class="btn btn-primary" style="flex: 1;" onclick="closeModal()">Cancel</button>
-                    <button class="btn btn-danger" style="flex: 1;" onclick="executeLogout()">Confirm</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. USER CRUD MODAL (CREATE / EDIT) -->
-        <div id="userModal" class="modal-overlay">
-            <div class="modal-card">
-                <div style="font-size: 15px; font-weight: 800; color: var(--text-dark); margin-bottom: 12px; text-align: left;" id="userModalTitle">Manage User Account</div>
-                <form id="userModalForm" onsubmit="handleSaveUser(event)" style="text-align: left;">
-                    <input type="hidden" id="modalUserId">
-                    <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" id="modalFullName" class="form-input" placeholder="e.g. Juan Cruz" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Username</label>
-                        <input type="text" id="modalUsername" class="form-input" placeholder="e.g. juancruz" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" id="modalEmail" class="form-input" placeholder="e.g. juan@wlc.edu.ph" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">System Role</label>
-                        <select id="modalRole" class="form-input" required>
-                            <option value="Student">Student Intern</option>
-                            <option value="Supervisor">Agency Supervisor</option>
-                            <option value="Faculty">Faculty Coordinator</option>
-                            <option value="Admin">System Admin</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Account Status</label>
-                        <select id="modalStatus" class="form-input" required>
-                            <option value="Active">Active</option>
-                            <option value="Suspended">Suspended</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="modalPasswordGroup">
-                        <label class="form-label">Password</label>
-                        <div class="input-wrapper">
-                            <input type="password" id="modalPassword" class="form-input" placeholder="Min 8 chars, mixed case, symbol">
-                            <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('modalPassword', this)"></i>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 8px; margin-top: 14px;">
-                        <button type="button" class="btn btn-danger" style="flex: 1;" onclick="closeUserModal()">Cancel</button>
-                        <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- 9. STUDENT DETAILS INSPECTOR MODAL (FOR FACULTY) -->
-        <div id="studentDetailsModal" class="modal-overlay">
-            <div class="modal-card">
-                <div style="font-size: 15px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 4px; text-align: left;" id="inspectorStudentName">Student Profile</div>
-                <div style="font-size: 10px; color: var(--text-muted); text-align: left; margin-bottom: 12px;" id="inspectorStudentSub">BSIT Student</div>
-
-                <div id="inspectorContent" style="text-align: left; font-size: 11px;">
-                    <!-- Dynamically populated student details -->
-                </div>
-
-                <button class="btn btn-primary" style="margin-top: 14px;" onclick="closeStudentDetailsModal()">Close Profile</button>
-            </div>
+            <button class="btn btn-danger btn-block" onclick="promptLogout()" style="margin-top: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
 
     </div>
 
+    <!-- ========================================================================= -->
+    <!-- 2. DESKTOP WEB ADMIN PORTAL CONTAINER (FACULTY & ADMIN ONLY)              -->
+    <!-- ========================================================================= -->
+    <div id="adminWebDashboard" class="admin-web-container" style="display: none;">
+        
+        <header class="admin-topbar">
+            <div class="admin-brand">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>WLC InternTrack Admin Portal</span>
+            </div>
+            <div class="admin-top-actions">
+                <div style="text-align: right; margin-right: 12px;">
+                    <div id="webAdminName" style="font-size: 14px; font-weight: 800; color: var(--gold-bright);">Faculty Coordinator</div>
+                    <div id="webAdminRole" style="font-size: 11px; opacity: 0.85;">WLC OJT Adviser & System Admin</div>
+                </div>
+                <i class="fa-solid fa-moon theme-toggle-btn" onclick="toggleDarkMode()" title="Toggle Theme" style="font-size: 16px; margin-right: 12px;"></i>
+                <button class="btn btn-danger" style="padding: 8px 14px; font-size: 11px;" onclick="promptLogout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+            </div>
+        </header>
+
+        <div class="admin-main-layout">
+            <aside class="admin-sidebar">
+                <div class="admin-nav-item active" onclick="switchAdminWebTab('approvals', event)">
+                    <i class="fa-solid fa-square-check"></i> Log Approvals
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminWebTab('analytics', event)">
+                    <i class="fa-solid fa-chart-pie"></i> Class Analytics & Roster
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminWebTab('docs', event)">
+                    <i class="fa-solid fa-folder-open"></i> Document Audits
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminWebTab('users', event)">
+                    <i class="fa-solid fa-users-gear"></i> User Management (CRUD)
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminWebTab('audit', event)">
+                    <i class="fa-solid fa-shield-halved"></i> System Audit Trail
+                </div>
+            </aside>
+
+            <main class="admin-content-area">
+                
+                <div id="adminTabApprovals" class="admin-tab-content active">
+                    <div class="admin-card">
+                        <div style="font-size: 14px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 12px; text-transform: uppercase;">
+                            <i class="fa-solid fa-user-check"></i> Verified OJT Logs Awaiting Final Faculty Approval
+                        </div>
+                        <div id="webFacultyLogList"></div>
+                    </div>
+                </div>
+
+                <div id="adminTabAnalytics" class="admin-tab-content">
+                    <div class="admin-grid-2">
+                        <div class="admin-card">
+                            <div class="stat-card-label">Total Active Interns</div>
+                            <div class="stat-card-num" id="webFacStatTotalStudents" style="font-size: 28px;">0</div>
+                        </div>
+                        <div class="admin-card">
+                            <div class="stat-card-label">Completed OJT Requirements</div>
+                            <div class="stat-card-num" id="webFacStatCompletedOjt" style="font-size: 28px; color: #16a34a;">0</div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--emerald-primary); text-transform: uppercase;">
+                                <i class="fa-solid fa-graduation-cap"></i> Student Master Class Roster & Progress
+                            </div>
+                            <button class="btn btn-gold" onclick="exportClassSummaryCSV()"><i class="fa-solid fa-file-csv"></i> Export Class Progress CSV</button>
+                        </div>
+                        <div class="search-wrapper">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" class="search-input" placeholder="Search class records by name or student ID..." onkeyup="filterContainer(this.value, 'webFacultyClassMasterList')">
+                        </div>
+                        <div id="webFacultyClassMasterList" class="admin-grid-2"></div>
+                    </div>
+                </div>
+
+                <div id="adminTabDocs" class="admin-tab-content">
+                    <div class="admin-card">
+                        <div style="font-size: 14px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 12px; text-transform: uppercase;">
+                            <i class="fa-solid fa-file-circle-check"></i> Pre-OJT Mandatory Documents Submitted for Audit
+                        </div>
+                        <div id="webFacultyDocsList"></div>
+                    </div>
+                </div>
+
+                <div id="adminTabUsers" class="admin-tab-content">
+                    <div class="admin-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--emerald-primary); text-transform: uppercase;">
+                                <i class="fa-solid fa-users-gear"></i> System User Account Management
+                            </div>
+                            <button class="btn btn-primary" onclick="openCreateUserModal()"><i class="fa-solid fa-user-plus"></i> Create New User Account</button>
+                        </div>
+                        <div class="search-wrapper">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" class="search-input" placeholder="Search users by name, email, or role..." onkeyup="filterContainer(this.value, 'webUserCrudList')">
+                        </div>
+                        <div id="webUserCrudList" class="admin-grid-2"></div>
+                    </div>
+                </div>
+
+                <div id="adminTabAudit" class="admin-tab-content">
+                    <div class="admin-card">
+                        <div style="font-size: 14px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 12px; text-transform: uppercase;">
+                            <i class="fa-solid fa-shield-halved"></i> Real-time System Audit Log Stream
+                        </div>
+                        <div class="search-wrapper">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" class="search-input" placeholder="Search system audit events..." onkeyup="filterContainer(this.value, 'webAuditLogList')">
+                        </div>
+                        <div id="webAuditLogList" class="audit-container"></div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 3. MODALS (SHARED)                                                        -->
+    <!-- ========================================================================= -->
+    
+    <div id="logoutModal" class="modal-overlay">
+        <div class="modal-card">
+            <div style="font-size: 16px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px;">Confirm Logout</div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">Are you sure you want to sign out of WLC InternTrack?</p>
+            <div style="display: flex; gap: 8px; width: 100%;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" style="flex: 1;" onclick="executeLogout()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal-overlay">
+        <div class="modal-card">
+            <div style="font-size: 15px; font-weight: 800; color: var(--text-dark); margin-bottom: 12px; text-align: left;" id="userModalTitle">Manage User Account</div>
+            <form id="userModalForm" onsubmit="handleSaveUser(event)" style="text-align: left;">
+                <input type="hidden" id="modalUserId">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="modalFullName" class="form-input" placeholder="e.g. Juan Cruz" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="modalUsername" class="form-input" placeholder="e.g. juancruz" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="modalEmail" class="form-input" placeholder="e.g. juan@wlc.edu.ph" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">System Role</label>
+                    <select id="modalRole" class="form-input" required>
+                        <option value="Student">Student Intern</option>
+                        <option value="Supervisor">Agency Supervisor</option>
+                        <option value="Faculty">Faculty Coordinator</option>
+                        <option value="Admin">System Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Account Status</label>
+                    <select id="modalStatus" class="form-input" required>
+                        <option value="Active">Active</option>
+                        <option value="Suspended">Suspended</option>
+                    </select>
+                </div>
+                <div class="form-group" id="modalPasswordGroup">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="modalPassword" class="form-input" placeholder="Min 8 chars, mixed case, symbol">
+                        <i class="fa-solid fa-eye toggle-pw" onclick="togglePassword('modalPassword', this)"></i>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 14px;">
+                    <button type="button" class="btn btn-danger" style="flex: 1;" onclick="closeUserModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="studentDetailsModal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 520px;">
+            <div style="font-size: 16px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 4px; text-align: left;" id="inspectorStudentName">Student Profile</div>
+            <div style="font-size: 11px; color: var(--text-muted); text-align: left; margin-bottom: 12px;" id="inspectorStudentSub">BSIT Student</div>
+
+            <div id="inspectorContent" style="text-align: left; font-size: 12px;"></div>
+
+            <button class="btn btn-primary btn-block" style="margin-top: 14px;" onclick="closeStudentDetailsModal()">Close Profile</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Engine -->
     <script>
     const SUPABASE_URL = "https://ugucenfgekasazeguqpn.supabase.co/rest/v1";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndWNlbmZnZWthc2F6ZWd1cXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4NzY4MzgsImV4cCI6MjEwNzQ1MjgzOH0.dZp1nmNkUgZt3m7uJlCvn7Q6LzABH3bpY6tRIBweGqM";
@@ -866,14 +1030,6 @@
 
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
-        const icon = document.querySelector('.theme-toggle-btn');
-        if (icon) {
-            if (document.body.classList.contains('dark-mode')) {
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
-        }
     }
 
     function filterContainer(query, containerId) {
@@ -912,7 +1068,7 @@
     }
 
     document.addEventListener('click', (e) => {
-        if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.toggle-pw') || e.target.closest('.tab-btn') || e.target.closest('input') || e.target.closest('select')) {
+        if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.toggle-pw') || e.target.closest('.tab-btn') || e.target.closest('.admin-nav-item') || e.target.closest('input') || e.target.closest('select')) {
             playComfortClick();
         }
     });
@@ -932,6 +1088,32 @@
         if (target) target.classList.add('active');
     }
 
+    function switchAdminWebTab(tabName, evt) {
+        document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+
+        if (tabName === 'approvals') {
+            document.getElementById('adminTabApprovals').classList.add('active');
+            loadFacultyDashboard();
+        } else if (tabName === 'analytics') {
+            document.getElementById('adminTabAnalytics').classList.add('active');
+            loadFacultyClassAnalytics();
+        } else if (tabName === 'docs') {
+            document.getElementById('adminTabDocs').classList.add('active');
+            loadFacultyDashboard();
+        } else if (tabName === 'users') {
+            document.getElementById('adminTabUsers').classList.add('active');
+            loadUserCrudList();
+        } else if (tabName === 'audit') {
+            document.getElementById('adminTabAudit').classList.add('active');
+            fetchAndRenderAuditLogs();
+        }
+
+        if (evt && evt.currentTarget) {
+            evt.currentTarget.classList.add('active');
+        }
+    }
+
     function switchSubTab(role, tabName, evt) {
         if (role === 'student') {
             setTabVisible('studentClockTab', tabName === 'clockTab');
@@ -945,17 +1127,6 @@
             if (tabName === 'verifyLogsTab') loadSupervisorDashboard();
             if (tabName === 'rosterTab') loadSupervisorRoster();
             if (tabName === 'evalHistoryTab') loadSupervisorEvalHistory();
-        } else if (role === 'faculty') {
-            setTabVisible('facLogsTab', tabName === 'facLogsTab');
-            setTabVisible('facAnalyticsTab', tabName === 'facAnalyticsTab');
-            setTabVisible('facDocsTab', tabName === 'facDocsTab');
-            setTabVisible('facUserCrudTab', tabName === 'facUserCrudTab');
-            setTabVisible('facAuditTab', tabName === 'facAuditTab');
-
-            if (tabName === 'facAnalyticsTab') loadFacultyClassAnalytics();
-            if (tabName === 'facUserCrudTab') loadUserCrudList();
-            if (tabName === 'facAuditTab') fetchAndRenderAuditLogs();
-            if (tabName === 'facDocsTab' || tabName === 'facLogsTab') loadFacultyDashboard();
         }
 
         if (evt && evt.target) {
@@ -1244,22 +1415,33 @@
 
     function routeUserDashboard() {
         if (!currentUser) return;
+
+        const mobileFrame = document.getElementById('mobileAppFrame');
+        const adminWeb = document.getElementById('adminWebDashboard');
+
         if (currentUser.role === 'Student') {
+            adminWeb.style.display = 'none';
+            mobileFrame.style.display = 'flex';
             const nameEl = document.getElementById('stdName');
             if (nameEl) nameEl.innerText = currentUser.full_name;
             switchScreen('studentDashboard'); 
             loadStudentDashboard();
         } else if (currentUser.role === 'Supervisor') {
+            adminWeb.style.display = 'none';
+            mobileFrame.style.display = 'flex';
             const nameEl = document.getElementById('supName');
             if (nameEl) nameEl.innerText = currentUser.full_name;
             switchScreen('supervisorDashboard'); 
             loadSupervisorDashboard();
         } else if (currentUser.role === 'Faculty' || currentUser.role === 'Admin') {
-            const nameEl = document.getElementById('facName');
-            const subEl = document.getElementById('facRoleSubtitle');
+            mobileFrame.style.display = 'none';
+            adminWeb.style.display = 'flex';
+            
+            const nameEl = document.getElementById('webAdminName');
+            const roleEl = document.getElementById('webAdminRole');
             if (nameEl) nameEl.innerText = currentUser.full_name;
-            if (subEl) subEl.innerText = `${currentUser.role} Control Center`;
-            switchScreen('facultyDashboard'); 
+            if (roleEl) roleEl.innerText = `${currentUser.role} Control Portal`;
+
             loadFacultyDashboard();
         }
     }
@@ -1299,7 +1481,7 @@
 
             const list = document.getElementById('studentLogList');
             if (list) {
-                list.innerHTML = (!Array.isArray(logs) || logs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No daily logs submitted yet.<\/p>' : '';
+                list.innerHTML = (!Array.isArray(logs) || logs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No daily logs submitted yet.</p>' : '';
                 if (Array.isArray(logs)) {
                     logs.forEach(log => {
                         list.innerHTML += `
@@ -1444,7 +1626,7 @@
         let tableRows = '';
 
         if (cachedStudentLogs.length === 0) {
-            tableRows = `<tr><td colspan="4" style="text-align:center; padding:12px;">No shift logs submitted.<\/td><\/tr>`;
+            tableRows = `<tr><td colspan="4" style="text-align:center; padding:12px;">No shift logs submitted.</td></tr>`;
         } else {
             cachedStudentLogs.forEach((log, index) => {
                 const dateStr = log.created_at ? new Date(log.created_at).toLocaleDateString() : 'Shift Log';
@@ -1452,88 +1634,92 @@
                 totalHours += hrs;
                 tableRows += `
                     <tr>
-                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">${index + 1}<\/td>
-                        <td style="padding:8px; border:1px solid #ddd;">${dateStr}<\/td>
-                        <td style="padding:8px; border:1px solid #ddd;">${log.task_description || 'General Duties'}<\/td>
-                        <td style="padding:8px; border:1px solid #ddd; text-align:right; font-weight:bold;">${hrs.toFixed(2)} hrs<\/td>
-                    <\/tr>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">${index + 1}</td>
+                        <td style="padding:8px; border:1px solid #ddd;">${dateStr}</td>
+                        <td style="padding:8px; border:1px solid #ddd;">${log.task_description || 'General Duties'}</td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:right; font-weight:bold;">${hrs.toFixed(2)} hrs</td>
+                    </tr>
                 `;
             });
         }
 
         const printWin = window.open('', '_blank');
         if (!printWin) return;
-        printWin.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>WLC Ormoc - Official Student DTR Report<\/title>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 30px; color: #111; }
-                    .header { text-align: center; border-bottom: 2px solid #083325; padding-bottom: 12px; margin-bottom: 20px; }
-                    .header h2 { margin: 0; color: #083325; font-size: 20px; text-transform: uppercase; }
-                    .header p { margin: 4px 0 0 0; font-size: 12px; color: #555; }
-                    .meta { margin-bottom: 20px; font-size: 13px; line-height: 1.6; }
-                    table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 12px; }
-                    th { background-color: #083325; color: white; padding: 9px; border: 1px solid #083325; text-align: left; }
-                    .signatures { margin-top: 50px; display: flex; justify-content: space-between; }
-                    .sig-block { text-align: center; width: 30%; font-size: 12px; }
-                    .sig-line { border-top: 1px solid #000; margin-top: 40px; padding-top: 5px; font-weight: bold; }
-                <\/style>
-            <\/head>
-            <body>
-                <div class="header">
-                    <h2>Western Leyte College of Ormoc<\/h2>
-                    <p>College of Information and Communications Technology (CICTE)<\/p>
-                    <p style="font-weight: bold; margin-top: 6px;">OFFICIAL OJT DAILY TIME RECORD (DTR)<\/p>
-                <\/div>
 
-                <div class="meta">
-                    <strong>Student Intern:<\/strong> ${currentUser.full_name}<br>
-                    <strong>Username/ID:<\/strong> ${currentUser.username}<br>
-                    <strong>Course/Program:<\/strong> BSIT (Bachelor of Science in Information Technology)<br>
-                    <strong>Date Generated:<\/strong> ${new Date().toLocaleDateString()}
-                <\/div>
+        const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <title>WLC Ormoc - Official Student DTR Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 30px; color: #111; }
+        .header { text-align: center; border-bottom: 2px solid #083325; padding-bottom: 12px; margin-bottom: 20px; }
+        .header h2 { margin: 0; color: #083325; font-size: 20px; text-transform: uppercase; }
+        .header p { margin: 4px 0 0 0; font-size: 12px; color: #555; }
+        .meta { margin-bottom: 20px; font-size: 13px; line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 12px; }
+        th { background-color: #083325; color: white; padding: 9px; border: 1px solid #083325; text-align: left; }
+        .signatures { margin-top: 50px; display: flex; justify-content: space-between; }
+        .sig-block { text-align: center; width: 30%; font-size: 12px; }
+        .sig-line { border-top: 1px solid #000; margin-top: 40px; padding-top: 5px; font-weight: bold; }
+    </style>
+<\/head>
+<body>
+    <div class="header">
+        <h2>Western Leyte College of Ormoc</h2>
+        <p>College of Information and Communications Technology (CICTE)</p>
+        <p style="font-weight: bold; margin-top: 6px;">OFFICIAL OJT DAILY TIME RECORD (DTR)</p>
+    </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 8%;">#<\/th>
-                            <th style="width: 22%;">Date<\/th>
-                            <th style="width: 50%;">Task Description / Accomplishment<\/th>
-                            <th style="width: 20%; text-align:right;">Hours Rendered<\/th>
-                        <\/tr>
-                    <\/thead>
-                    <tbody>
-                        ${tableRows}
-                    <\/tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" style="padding:10px; border:1px solid #ddd; text-align:right; font-weight:bold;">Total Approved Hours Rendered:<\/td>
-                            <td style="padding:10px; border:1px solid #ddd; text-align:right; font-weight:bold; color:#083325;">${totalHours.toFixed(2)} hrs<\/td>
-                        <\/tr>
-                    <\/tfoot>
-                <\/table>
+    <div class="meta">
+        <strong>Student Intern:</strong> ${currentUser.full_name}<br>
+        <strong>Username/ID:</strong> ${currentUser.username}<br>
+        <strong>Course/Program:</strong> BSIT (Bachelor of Science in Information Technology)<br>
+        <strong>Date Generated:</strong> ${new Date().toLocaleDateString()}
+    </div>
 
-                <div class="signatures">
-                    <div class="sig-block">
-                        <div class="sig-line">${currentUser.full_name}<\/div>
-                        Student Intern
-                    <\/div>
-                    <div class="sig-block">
-                        <div class="sig-line">Agency Supervisor<\/div>
-                        HTE Partner Supervisor
-                    <\/div>
-                    <div class="sig-block">
-                        <div class="sig-line">Faculty Coordinator<\/div>
-                        WLC OJT Coordinator
-                    <\/div>
-                <\/div>
-                <script>setTimeout(function() { window.print(); }, 500);<\/script>
-            <\/body>
-            <\/html>
-        `);
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 8%;">#</th>
+                <th style="width: 22%;">Date</th>
+                <th style="width: 50%;">Task Description / Accomplishment</th>
+                <th style="width: 20%; text-align:right;">Hours Rendered</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${tableRows}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="padding:10px; border:1px solid #ddd; text-align:right; font-weight:bold;">Total Approved Hours Rendered:</td>
+                <td style="padding:10px; border:1px solid #ddd; text-align:right; font-weight:bold; color:#083325;">${totalHours.toFixed(2)} hrs</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="signatures">
+        <div class="sig-block">
+            <div class="sig-line">${currentUser.full_name}</div>
+            Student Intern
+        </div>
+        <div class="sig-block">
+            <div class="sig-line">Agency Supervisor</div>
+            HTE Partner Supervisor
+        </div>
+        <div class="sig-block">
+            <div class="sig-line">Faculty Coordinator</div>
+            WLC OJT Coordinator
+        </div>
+    </div>
+<\/body>
+<\/html>`;
+
+        printWin.document.open();
+        printWin.document.write(htmlContent);
         printWin.document.close();
+        setTimeout(() => {
+            printWin.print();
+        }, 500);
     }
 
     async function loadStudentDocuments() {
@@ -1543,7 +1729,7 @@
             const docs = await res.json();
             const list = document.getElementById('studentDocsList');
             if (list) {
-                list.innerHTML = (!Array.isArray(docs) || docs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No documents uploaded.<\/p>' : '';
+                list.innerHTML = (!Array.isArray(docs) || docs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No documents uploaded.</p>' : '';
                 if (Array.isArray(docs)) {
                     docs.forEach(d => {
                         list.innerHTML += `
@@ -1585,7 +1771,7 @@
             const logs = await logsRes.json();
             const list = document.getElementById('supervisorLogList');
             if (list) {
-                list.innerHTML = (!Array.isArray(logs) || logs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No pending student logs.<\/p>' : '';
+                list.innerHTML = (!Array.isArray(logs) || logs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No pending student logs.</p>' : '';
 
                 if (Array.isArray(logs)) {
                     for (const log of logs) {
@@ -1612,10 +1798,10 @@
             const students = await stdRes.json();
             const select = document.getElementById('evalStudentSelect');
             if (select) {
-                select.innerHTML = '<option value="">-- Select Student Intern --<\/option>';
+                select.innerHTML = '<option value="">-- Select Student Intern --</option>';
                 if (Array.isArray(students) && students.length > 0) {
                     students.forEach(s => { 
-                        select.innerHTML += `<option value="${s.id}">${s.full_name || s.username} (${s.username})<\/option>`; 
+                        select.innerHTML += `<option value="${s.id}">${s.full_name || s.username} (${s.username})</option>`; 
                     });
                 }
             }
@@ -1668,7 +1854,7 @@
             const list = document.getElementById('supervisorRosterList');
             if (!list) return;
 
-            list.innerHTML = (!Array.isArray(students) || students.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No interns assigned.<\/p>' : '';
+            list.innerHTML = (!Array.isArray(students) || students.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No interns assigned.</p>' : '';
 
             if (Array.isArray(students)) {
                 for (const s of students) {
@@ -1701,7 +1887,7 @@
             const list = document.getElementById('supervisorEvalHistoryList');
             if (!list) return;
 
-            list.innerHTML = (!Array.isArray(evals) || evals.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No evaluations submitted yet.<\/p>' : '';
+            list.innerHTML = (!Array.isArray(evals) || evals.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No evaluations submitted yet.</p>' : '';
 
             if (Array.isArray(evals)) {
                 for (const ev of evals) {
@@ -1767,26 +1953,25 @@
         } catch (err) { showToast("Connection error while submitting evaluation.", "error"); }
     }
 
-    // FACULTY FUNCTIONS & CLASS MASTER ANALYTICS
+    // FACULTY / ADMIN DESKTOP ENGINE
     async function loadFacultyDashboard() {
         try {
             const logsRes = await fetch(`${SUPABASE_URL}/ojt_logs?supervisor_status=eq.Verified&faculty_status=eq.Pending&order=created_at.desc`, { headers });
             const logs = await logsRes.json();
-            const list = document.getElementById('facultyLogList');
+            const list = document.getElementById('webFacultyLogList');
             if (list) {
-                list.innerHTML = (!Array.isArray(logs) || logs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No verified logs awaiting approval.<\/p>' : '';
+                list.innerHTML = (!Array.isArray(logs) || logs.length === 0) ? '<p style="font-size:12px; color:var(--text-muted); padding:10px;">No verified logs awaiting final faculty approval.</p>' : '';
 
                 if (Array.isArray(logs)) {
                     for (const log of logs) {
                         const studentName = await getUserFullName(log.student_id);
                         list.innerHTML += `
-                            <div class="log-item">
-                                <div class="log-header">
-                                    <span style="font-size:11px; font-weight:700; color:var(--emerald-primary);">${studentName}</span>
-                                    <span class="badge badge-verified">${log.hours_rendered} Hrs Verified</span>
+                            <div class="log-item" style="display:flex; justify-content:space-between; align-items:center;">
+                                <div style="flex:1;">
+                                    <div style="font-size:13px; font-weight:800; color:var(--emerald-primary);">${studentName} <span class="badge badge-verified" style="margin-left:8px;">${log.hours_rendered} Hrs Verified</span></div>
+                                    <div class="log-desc" style="margin-top:4px;">${log.task_description}</div>
                                 </div>
-                                <div class="log-desc">${log.task_description}</div>
-                                <button class="btn btn-primary" style="padding:7px; font-size:10px;" onclick="approveLog('${log.id}', '${log.student_id}', ${log.hours_rendered})">Grant Final Approval</button>
+                                <button class="btn btn-primary" style="padding:8px 16px; font-size:11px;" onclick="approveLog('${log.id}', '${log.student_id}', ${log.hours_rendered})"><i class="fa-solid fa-check"></i> Grant Final Approval</button>
                             </div>
                         `;
                     }
@@ -1795,22 +1980,22 @@
 
             const docsRes = await fetch(`${SUPABASE_URL}/student_documents?status=eq.Pending&order=created_at.desc`, { headers });
             const docs = await docsRes.json();
-            const docList = document.getElementById('facultyDocsList');
+            const docList = document.getElementById('webFacultyDocsList');
             if (docList) {
-                docList.innerHTML = (!Array.isArray(docs) || docs.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No documents pending audit.<\/p>' : '';
+                docList.innerHTML = (!Array.isArray(docs) || docs.length === 0) ? '<p style="font-size:12px; color:var(--text-muted); padding:10px;">No documents pending audit.</p>' : '';
 
                 if (Array.isArray(docs)) {
                     for (const d of docs) {
                         const name = await getUserFullName(d.student_id);
                         docList.innerHTML += `
-                            <div class="log-item">
-                                <div class="log-header">
-                                    <span style="font-size:11px; font-weight:700;">${name} - ${d.doc_type}</span>
+                            <div class="log-item" style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <div style="font-size:13px; font-weight:800; color:var(--text-dark);">${name} &bull; <span style="color:var(--emerald-primary);">${d.doc_type}</span></div>
+                                    <div style="font-size:11px; margin-top:4px;"><a href="${d.file_url}" target="_blank" style="color:var(--emerald-primary); font-weight:700;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Inspect Document File</a></div>
                                 </div>
-                                <div style="font-size:10px; margin-bottom:6px;"><a href="${d.file_url}" target="_blank" style="color:var(--emerald-primary); font-weight:700;">Inspect Document File</a></div>
-                                <div style="display:flex; gap:6px; width:100%;">
-                                    <button class="btn btn-success" style="flex:1; padding:7px; font-size:10px;" onclick="auditDocument('${d.id}', 'Approved')">Approve Doc</button>
-                                    <button class="btn btn-danger" style="flex:1; padding:7px; font-size:10px;" onclick="auditDocument('${d.id}', 'Needs Revision')">Request Revision</button>
+                                <div style="display:flex; gap:8px;">
+                                    <button class="btn btn-success" style="padding:8px 14px; font-size:11px;" onclick="auditDocument('${d.id}', 'Approved')">Approve Document</button>
+                                    <button class="btn btn-danger" style="padding:8px 14px; font-size:11px;" onclick="auditDocument('${d.id}', 'Needs Revision')">Request Revision</button>
                                 </div>
                             </div>
                         `;
@@ -1829,13 +2014,13 @@
             const students = await stdRes.json();
             masterStudentsList = Array.isArray(students) ? students : [];
 
-            document.getElementById('facStatTotalStudents').innerText = masterStudentsList.length;
+            document.getElementById('webFacStatTotalStudents').innerText = masterStudentsList.length;
 
             let completedCount = 0;
-            const list = document.getElementById('facultyClassMasterList');
+            const list = document.getElementById('webFacultyClassMasterList');
             if (!list) return;
 
-            list.innerHTML = masterStudentsList.length === 0 ? '<p style="font-size:11px; color:var(--text-muted);">No enrolled students found.<\/p>' : '';
+            list.innerHTML = masterStudentsList.length === 0 ? '<p style="font-size:12px; color:var(--text-muted); padding:10px;">No enrolled students found.</p>' : '';
 
             for (const s of masterStudentsList) {
                 const profRes = await fetch(`${SUPABASE_URL}/student_profiles?user_id=eq.${s.id}`, { headers });
@@ -1850,21 +2035,21 @@
                 list.innerHTML += `
                     <div class="user-card" style="cursor:pointer;" onclick="openStudentDetailsModal('${s.id}', '${s.full_name}', '${s.email}', '${prof.student_id_number}', ${rendered}, ${required})">
                         <div class="log-header">
-                            <span style="font-size:11px; font-weight:800; color:var(--emerald-primary);">${s.full_name}</span>
+                            <span style="font-size:12px; font-weight:800; color:var(--emerald-primary);">${s.full_name}</span>
                             <span class="badge ${rendered >= required ? 'badge-approved' : 'badge-pending'}">${rendered.toFixed(1)} / ${required} hrs</span>
                         </div>
-                        <div style="font-size:10px; color:var(--text-muted); display:flex; justify-content:space-between;">
+                        <div style="font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between; margin-top:4px;">
                             <span>ID: <strong>${prof.student_id_number}</strong></span>
                             <span style="color:var(--emerald-primary); font-weight:700;"><i class="fa-solid fa-eye"></i> View Profile</span>
                         </div>
-                        <div class="progress-bar-bg" style="margin-top:6px;">
+                        <div class="progress-bar-bg" style="margin-top:8px;">
                             <div class="progress-bar-fill" style="width: ${percent}%;"></div>
                         </div>
                     </div>
                 `;
             }
 
-            document.getElementById('facStatCompletedOjt').innerText = completedCount;
+            document.getElementById('webFacStatCompletedOjt').innerText = completedCount;
 
         } catch (e) { showToast("Error loading class analytics.", "error"); }
     }
@@ -1874,7 +2059,7 @@
         document.getElementById('inspectorStudentSub').innerText = `ID: ${studentNum} | ${email}`;
 
         const container = document.getElementById('inspectorContent');
-        container.innerHTML = '<p style="color:var(--text-muted);">Loading student details...<\/p>';
+        container.innerHTML = '<p style="color:var(--text-muted);">Loading student details...</p>';
 
         document.getElementById('studentDetailsModal').style.display = 'flex';
 
@@ -1885,26 +2070,26 @@
             const evalRes = await fetch(`${SUPABASE_URL}/evaluations?student_id=eq.${studentId}`, { headers });
             const evals = await evalRes.json();
 
-            let logsHtml = (Array.isArray(logs) && logs.length > 0) ? logs.map(l => `<li style="margin-bottom:4px;">${new Date(l.created_at).toLocaleDateString()}: <strong>${l.hours_rendered}h</strong> - ${l.task_description} (${l.supervisor_status})</li>`).join('') : '<li>No logs submitted yet.</li>';
-            let evalHtml = (Array.isArray(evals) && evals.length > 0) ? evals.map(ev => `<div><strong>${ev.eval_type}:</strong> ${ev.overall_rating}/5.0 (Punctuality: ${ev.punctuality_score}, Quality: ${ev.quality_of_work_score})</div>`).join('') : '<div>No supervisor evaluations recorded yet.</div>';
+            let logsHtml = (Array.isArray(logs) && logs.length > 0) ? logs.map(l => `<li style="margin-bottom:6px;">${new Date(l.created_at).toLocaleDateString()}: <strong>${l.hours_rendered}h</strong> - ${l.task_description} (${l.supervisor_status})</li>`).join('') : '<li>No logs submitted yet.</li>';
+            let evalHtml = (Array.isArray(evals) && evals.length > 0) ? evals.map(ev => `<div style="margin-top:4px;"><strong>${ev.eval_type}:</strong> ${ev.overall_rating}/5.0 (Punctuality: ${ev.punctuality_score}, Quality: ${ev.quality_of_work_score})</div>`).join('') : '<div>No supervisor evaluations recorded yet.</div>';
 
             container.innerHTML = `
-                <div class="card" style="padding:10px; margin-bottom:8px;">
-                    <div class="card-title">OJT Progress</div>
-                    <div style="font-size:14px; font-weight:800; color:var(--emerald-primary);">${rendered.toFixed(2)} / ${required} Hours Rendered</div>
+                <div class="card" style="padding:12px; margin-bottom:10px;">
+                    <div class="card-title">OJT Progress Overview</div>
+                    <div style="font-size:16px; font-weight:800; color:var(--emerald-primary); margin-top:2px;">${rendered.toFixed(2)} / ${required} Hours Rendered</div>
                 </div>
-                <div style="margin-bottom:8px;">
-                    <strong>Supervisor Performance Rubrics:</strong>
+                <div style="margin-bottom:12px; background:var(--bg-input); padding:10px; border-radius:12px;">
+                    <strong style="color:var(--emerald-primary);">Supervisor Performance Rubrics:</strong>
                     ${evalHtml}
                 </div>
                 <div>
-                    <strong>Recent Daily Logs:</strong>
-                    <ul style="padding-left:16px; margin-top:4px; max-height:120px; overflow-y:auto; font-size:10px;">
+                    <strong style="color:var(--emerald-primary);">Shift Log History:</strong>
+                    <ul style="padding-left:18px; margin-top:6px; max-height:160px; overflow-y:auto; font-size:11px;">
                         ${logsHtml}
                     </ul>
                 </div>
             `;
-        } catch (e) { container.innerHTML = '<p style="color:#b91c1c;">Error fetching student logs.<\/p>'; }
+        } catch (e) { container.innerHTML = '<p style="color:#b91c1c;">Error fetching student logs.</p>'; }
     }
 
     function closeStudentDetailsModal() {
@@ -1934,10 +2119,10 @@
         try {
             const res = await fetch(`${SUPABASE_URL}/users?order=created_at.desc`, { headers });
             const users = await res.json();
-            const list = document.getElementById('userCrudList');
+            const list = document.getElementById('webUserCrudList');
             if (!list) return;
 
-            list.innerHTML = (!Array.isArray(users) || users.length === 0) ? '<p style="font-size:11px; color:var(--text-muted);">No users found.<\/p>' : '';
+            list.innerHTML = (!Array.isArray(users) || users.length === 0) ? '<p style="font-size:12px; color:var(--text-muted); padding:10px;">No users found.</p>' : '';
 
             if (Array.isArray(users)) {
                 users.forEach(u => {
@@ -1945,13 +2130,13 @@
                     list.innerHTML += `
                         <div class="user-card">
                             <div class="log-header">
-                                <span style="font-size:11px; font-weight:800; color:var(--emerald-primary);">${u.full_name} (${u.username})</span>
+                                <span style="font-size:12px; font-weight:800; color:var(--emerald-primary);">${u.full_name} (${u.username})</span>
                                 ${statusBadge}
                             </div>
-                            <div style="font-size:10px; color:var(--text-muted); margin-bottom: 6px;">Role: <strong>${u.role}</strong> | ${u.email}</div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-bottom: 8px;">Role: <strong>${u.role}</strong> | ${u.email}</div>
                             <div style="display:flex; gap:6px;">
-                                <button class="btn btn-gold" style="flex:1; padding:6px; font-size:10px;" onclick="openEditUserModal('${u.id}', '${u.full_name}', '${u.username}', '${u.email}', '${u.role}', '${u.status}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                                <button class="btn btn-danger" style="flex:1; padding:6px; font-size:10px;" onclick="deleteUser('${u.id}', '${u.username}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                                <button class="btn btn-gold" style="flex:1; padding:6px; font-size:11px;" onclick="openEditUserModal('${u.id}', '${u.full_name}', '${u.username}', '${u.email}', '${u.role}', '${u.status}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <button class="btn btn-danger" style="flex:1; padding:6px; font-size:11px;" onclick="deleteUser('${u.id}', '${u.username}')"><i class="fa-solid fa-trash"></i> Delete</button>
                             </div>
                         </div>
                     `;
@@ -2056,12 +2241,12 @@
         try {
             const auditRes = await fetch(`${SUPABASE_URL}/audit_logs?order=created_at.desc&limit=35`, { headers });
             const audits = await auditRes.json();
-            const auditBox = document.getElementById('auditLogList');
+            const auditBox = document.getElementById('webAuditLogList');
 
             if (!auditBox) return;
 
             if (!Array.isArray(audits) || audits.length === 0) {
-                auditBox.innerHTML = '<p style="font-size:11px; color:var(--text-muted); text-align:center; padding:12px;">No audit trail entries recorded yet.<\/p>';
+                auditBox.innerHTML = '<p style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">No audit trail entries recorded yet.</p>';
                 return;
             }
 
@@ -2143,6 +2328,9 @@
         if (currentUser) await logActivity("USER_LOGOUT", `User ${currentUser.username} logged out.`);
         currentUser = null;
         localStorage.removeItem('intern_session');
+
+        document.getElementById('adminWebDashboard').style.display = 'none';
+        document.getElementById('mobileAppFrame').style.display = 'flex';
         switchScreen('loginScreen');
         showToast("Logged out successfully.", "success");
     }
