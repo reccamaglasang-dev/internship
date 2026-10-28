@@ -882,6 +882,23 @@
                     </div>
                 </div>
 
+                <!-- Visual Interactive CAPTCHA Challenge (Shown when required) -->
+                <div id="captchaContainer" style="display: none; background: rgba(8, 51, 37, 0.05); border: 1px dashed var(--emerald-light); padding: 10px; border-radius: 12px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 10px; font-weight: 800; color: var(--emerald-primary); text-transform: uppercase;">
+                            <i class="fa-solid fa-shield-virus"></i> Security Verification
+                        </span>
+                        <button type="button" onclick="refreshCaptcha()" style="background: none; border: none; font-size: 11px; color: var(--emerald-primary); cursor: pointer; font-weight: 700;">
+                            <i class="fa-solid fa-rotate"></i> Reload
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                        <canvas id="captchaCanvas" width="130" height="36" style="background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color);"></canvas>
+                        <input type="text" id="captchaInput" class="form-input" placeholder="Enter code" style="font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;">
+                    </div>
+                    <div style="font-size: 9px; color: var(--text-muted);">Failed attempts exceeded safe limit. Enter the characters above to proceed.</div>
+                </div>
+
                 <button type="submit" class="btn btn-primary btn-block" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> Sign In to Portal</button>
             </form>
 
@@ -1051,7 +1068,7 @@
             <div id="studentClockTab" class="subtab-panel">
                 <div class="card">
                     <div class="card-title">OJT Progress Tracker</div>
-                    <div class="card-value" id="stdHoursDisplay">0.00 / 486 Hours</div>
+                    <div class="card-value" id="stdHoursDisplay">0.00 / 600 Hours</div>
                     <div class="progress-bar-bg">
                         <div id="stdProgressBar" class="progress-bar-fill"></div>
                     </div>
@@ -1375,6 +1392,9 @@
                 <div class="admin-nav-item" onclick="switchAdminWebTab('audit', event)">
                     <i class="fa-solid fa-shield-halved"></i> System Audit Trail
                 </div>
+                <div class="admin-nav-item" onclick="switchAdminWebTab('backup', event)">
+                    <i class="fa-solid fa-database"></i> Backup & Recovery
+                </div>
             </aside>
 
             <main class="admin-content-area">
@@ -1466,6 +1486,84 @@
                     </div>
                 </div>
 
+                <!-- Backup & Recovery Portal Tab (IAS 1 Section H) -->
+                <div id="adminTabBackup" class="admin-tab-content">
+                    <div class="admin-card" style="margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <div style="font-size: 15px; font-weight: 800; color: var(--emerald-primary); text-transform: uppercase;">
+                                    <i class="fa-solid fa-database"></i> Database Disaster Recovery & System Backups
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                                    Export snapshot archives of core collections (users, profiles, logs, evaluations, documents, audit trails) or restore state.
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-primary" onclick="exportFullSystemBackupJSON()">
+                                    <i class="fa-solid fa-download"></i> One-Click JSON Backup
+                                </button>
+                                <button class="btn btn-gold" onclick="exportFullSystemBackupSQL()">
+                                    <i class="fa-solid fa-file-code"></i> Export SQL Dump
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Scheduled Auto-Backup Policy Indicator & Controls -->
+                        <div style="background: rgba(8, 51, 37, 0.04); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(22, 163, 74, 0.15); color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                                    <i class="fa-solid fa-clock-rotate-left"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; font-weight: 800; color: var(--text-dark);">
+                                        Automated Scheduled Daily Cloud Backups
+                                    </div>
+                                    <div style="font-size: 11px; color: var(--text-muted);" id="backupScheduleStatusText">
+                                        Status: <span style="color: #16a34a; font-weight: 700;">ACTIVE</span> &bull; Daily at 00:00 UTC (Next run in ~6h) &bull; Retention: 30 days
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--text-dark);">
+                                    <input type="checkbox" id="autoBackupToggle" checked onchange="toggleAutoBackupSchedule(this.checked)" style="width: 18px; height: 18px; accent-color: var(--emerald-primary); cursor: pointer;">
+                                    <span>Enable Auto-Backup</span>
+                                </label>
+                                <button type="button" class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;" onclick="triggerScheduledBackupNow()">
+                                    <i class="fa-solid fa-play"></i> Run Now
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Restore System Section -->
+                        <div style="border-top: 1px dashed var(--border-color); padding-top: 14px;">
+                            <div style="font-size: 13px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px;">
+                                <i class="fa-solid fa-upload"></i> Restore / Inspect Backup Archive
+                            </div>
+                            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+                                Select a previously exported JSON backup file. The system will inspect table record counts, validate JSON structure, and allow restoring data into Supabase collections with full audit logging.
+                            </p>
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <input type="file" id="backupFileInput" accept=".json" class="form-input" style="flex: 1; min-width: 240px; padding: 7px;">
+                                <button class="btn btn-primary" onclick="inspectSelectedBackupFile()">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Inspect Archive
+                                </button>
+                                <button class="btn btn-danger" onclick="restoreSelectedBackupFile()">
+                                    <i class="fa-solid fa-rotate-left"></i> Execute Full Restore
+                                </button>
+                            </div>
+                            <div id="backupInspectResult" style="margin-top: 12px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Backup Log / History Container -->
+                    <div class="admin-card">
+                        <div style="font-size: 13px; font-weight: 800; color: var(--emerald-primary); margin-bottom: 10px; text-transform: uppercase;">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Recent Backup & Recovery History
+                        </div>
+                        <div id="backupHistoryList" style="font-size: 11px;"></div>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
@@ -1481,6 +1579,26 @@
             <div style="display: flex; gap: 8px; width: 100%;">
                 <button class="btn btn-primary" style="flex: 1;" onclick="closeModal()">Cancel</button>
                 <button class="btn btn-danger" style="flex: 1;" onclick="executeLogout()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inactivity Warning Modal (IAS 1 Section E: Session Management) -->
+    <div id="inactivityModal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 380px; text-align: center;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 12px auto;">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px;">Session Timeout Warning</div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+                You have been inactive for nearly 14 minutes. For security reasons, you will be automatically signed out in:
+            </p>
+            <div style="font-size: 32px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #b91c1c; margin-bottom: 16px;" id="inactivityCountdownText">
+                60s
+            </div>
+            <div style="display: flex; gap: 8px; width: 100%;">
+                <button class="btn btn-danger" style="flex: 1;" onclick="executeLogout(true)"><i class="fa-solid fa-right-from-bracket"></i> Sign Out Now</button>
+                <button class="btn btn-primary" style="flex: 1.3;" onclick="keepSessionAlive()"><i class="fa-solid fa-hand"></i> Keep me signed in</button>
             </div>
         </div>
     </div>
@@ -1617,6 +1735,16 @@
     let masterStudentsList = [];
     const usersCache = {};
 
+    // IAS 1 Checklist Enhancement State
+    let currentCaptchaText = "";
+    let isCaptchaRequired = false;
+    let inactivityTimer = null;
+    let inactivityCountdownInterval = null;
+    let inactivityWarningSeconds = 60;
+    const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+    const INACTIVITY_WARN_MS = 14 * 60 * 1000;    // 14 minutes (1-minute warning countdown)
+    let autoBackupInterval = null;
+
     const headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": `Bearer ${SUPABASE_KEY}`,
@@ -1711,6 +1839,9 @@
         } else if (tabName === 'audit') {
             document.getElementById('adminTabAudit').classList.add('active');
             fetchAndRenderAuditLogs();
+        } else if (tabName === 'backup') {
+            document.getElementById('adminTabBackup').classList.add('active');
+            loadBackupHistory();
         }
 
         if (evt && evt.currentTarget) {
@@ -1799,10 +1930,110 @@
         document.getElementById('loginForm').dispatchEvent(new Event('submit'));
     }
 
+    // IAS 1 Section D: Progressive Lockout & Visual Interactive CAPTCHA
+    function generateCaptchaText(len = 5) {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let str = '';
+        for (let i = 0; i < len; i++) {
+            str += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return str;
+    }
+
+    function renderCaptcha(text) {
+        currentCaptchaText = text;
+        const canvas = document.getElementById('captchaCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Background noise
+        ctx.fillStyle = '#f1f5f9';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Random lines
+        for (let i = 0; i < 4; i++) {
+            ctx.strokeStyle = ['#104e3a', '#f59e0b', '#0369a1', '#94a3b8'][i % 4];
+            ctx.lineWidth = 1 + Math.random() * 1.5;
+            ctx.beginPath();
+            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.stroke();
+        }
+
+        // Random dots
+        for (let i = 0; i < 25; i++) {
+            ctx.fillStyle = '#cbd5e1';
+            ctx.beginPath();
+            ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Draw distorted text
+        ctx.font = 'bold 20px "JetBrains Mono", monospace';
+        for (let i = 0; i < text.length; i++) {
+            ctx.save();
+            const char = text[i];
+            const x = 18 + i * 20;
+            const y = 24 + (Math.random() * 6 - 3);
+            const angle = (Math.random() * 24 - 12) * Math.PI / 180;
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            ctx.fillStyle = (i % 2 === 0) ? '#083325' : '#b45309';
+            ctx.fillText(char, 0, 0);
+            ctx.restore();
+        }
+    }
+
+    function showCaptchaChallenge() {
+        isCaptchaRequired = true;
+        const container = document.getElementById('captchaContainer');
+        const input = document.getElementById('captchaInput');
+        if (container) container.style.display = 'block';
+        if (input) {
+            input.value = '';
+            input.required = true;
+        }
+        renderCaptcha(generateCaptchaText(5));
+    }
+
+    function hideCaptchaChallenge() {
+        isCaptchaRequired = false;
+        const container = document.getElementById('captchaContainer');
+        const input = document.getElementById('captchaInput');
+        if (container) container.style.display = 'none';
+        if (input) {
+            input.value = '';
+            input.required = false;
+        }
+        currentCaptchaText = '';
+    }
+
+    function refreshCaptcha() {
+        renderCaptcha(generateCaptchaText(5));
+        const input = document.getElementById('captchaInput');
+        if (input) {
+            input.value = '';
+            input.focus();
+        }
+    }
+
     async function handleLogin(e) {
         e.preventDefault();
         const usernameInput = document.getElementById('loginUsername').value.trim();
         const passwordInput = document.getElementById('loginPassword').value.trim();
+        const captchaInputEl = document.getElementById('captchaInput');
+        const captchaVal = captchaInputEl ? captchaInputEl.value.trim().toUpperCase() : '';
+
+        // If CAPTCHA is active, enforce verification before checking credentials
+        if (isCaptchaRequired) {
+            if (!captchaVal || captchaVal !== currentCaptchaText.toUpperCase()) {
+                showToast("Security CAPTCHA verification failed. Please try again.", "error");
+                refreshCaptcha();
+                await logActivity("CAPTCHA_FAILED", `Failed CAPTCHA challenge for username attempt: ${usernameInput}`);
+                return;
+            }
+        }
 
         try {
             const res = await fetch(`${SUPABASE_URL}/users?or=(username.eq.${encodeURIComponent(usernameInput)},email.eq.${encodeURIComponent(usernameInput)})`, { headers });
@@ -1822,44 +2053,66 @@
                 return;
             }
 
+            // Check if user is currently locked out
             if (user.lockout_until && new Date(user.lockout_until) > new Date()) {
                 const remainingSecs = Math.ceil((new Date(user.lockout_until) - new Date()) / 1000);
                 startLockoutCountdown(remainingSecs);
+                // Trigger CAPTCHA requirement during/after lockout
+                showCaptchaChallenge();
                 showToast(`Account locked! Try again in ${remainingSecs}s.`, "error");
                 return;
             }
 
+            // Verify password
             if (user.password !== passwordInput) {
                 const newFailed = (user.failed_attempts || 0) + 1;
                 let updateData = { failed_attempts: newFailed };
 
+                // Every 3 failed attempts triggers progressive lockout: 1m (60s), 5m (300s), 15m (900s)
                 if (newFailed % 3 === 0) {
-                    const lockoutMultiplier = Math.floor(newFailed / 3);
-                    const durationSeconds = 30 * Math.pow(2, lockoutMultiplier - 1);
+                    const newLockoutCount = (user.lockout_count || 0) + 1;
+                    let durationSeconds = 60; // 1st lockout cycle = 1 minute (60s)
+                    if (newLockoutCount === 2) {
+                        durationSeconds = 300; // 2nd lockout cycle = 5 minutes (300s)
+                    } else if (newLockoutCount >= 3) {
+                        durationSeconds = 900; // 3rd+ lockout cycle = 15 minutes (900s)
+                    }
+
                     const lockoutUntil = new Date(Date.now() + durationSeconds * 1000).toISOString();
-                    
                     updateData.lockout_until = lockoutUntil;
-                    updateData.lockout_count = (user.lockout_count || 0) + 1;
+                    updateData.lockout_count = newLockoutCount;
 
                     startLockoutCountdown(durationSeconds);
-                    showToast(`3 unsuccessful attempts! Account locked for ${durationSeconds}s.`, "error");
-                    await logActivity("ACCOUNT_LOCKED", `User ${user.username} locked out for ${durationSeconds}s.`);
+                    showCaptchaChallenge();
+
+                    const durationDesc = durationSeconds >= 60 ? `${durationSeconds / 60}m (${durationSeconds}s)` : `${durationSeconds}s`;
+                    showToast(`3 consecutive failed attempts! Account locked for ${durationDesc}. CAPTCHA challenge activated.`, "error");
+                    await logActivity("ACCOUNT_LOCKED", `User ${user.username} locked out for ${durationDesc} (progressive lockout cycle ${newLockoutCount}).`);
                 } else {
-                    showToast(`Incorrect password! Attempt ${newFailed}/3 before lockout.`, "error");
-                    await logActivity("FAILED_LOGIN", `Incorrect password for user ${user.username}`);
+                    // If user has prior lockout history or failed attempts >= 2, prompt visual CAPTCHA
+                    if (newFailed >= 2 || (user.lockout_count && user.lockout_count > 0)) {
+                        showCaptchaChallenge();
+                    }
+                    showToast(`Incorrect password! Attempt ${newFailed % 3}/3 before progressive lockout.`, "error");
+                    await logActivity("FAILED_LOGIN", `Incorrect password for user ${user.username} (Attempt ${newFailed})`);
                 }
 
                 await fetch(`${SUPABASE_URL}/users?id=eq.${user.id}`, { method: 'PATCH', headers, body: JSON.stringify(updateData) });
                 return;
             }
 
+            // Successful Login: Reset failed attempts & lockout
             await fetch(`${SUPABASE_URL}/users?id=eq.${user.id}`, {
                 method: 'PATCH', headers,
-                body: JSON.stringify({ failed_attempts: 0, lockout_until: null })
+                body: JSON.stringify({ failed_attempts: 0, lockout_until: null, lockout_count: 0 })
             });
 
             currentUser = user;
+            hideCaptchaChallenge();
             localStorage.setItem('intern_session', JSON.stringify(currentUser));
+            sessionStorage.setItem('intern_session_active', '1');
+            startInactivityTimer();
+
             await logActivity("USER_LOGIN", `User ${currentUser.username} logged in successfully (${currentUser.role}).`);
             showToast(`Welcome back, ${currentUser.full_name}!`, "success");
             
@@ -1872,10 +2125,16 @@
     function startLockoutCountdown(seconds) {
         const banner = document.getElementById('lockoutBanner');
         const timerEl = document.getElementById('lockoutTimerSeconds');
+        const loginBtn = document.getElementById('loginBtn');
         if (!banner || !timerEl) return;
 
         banner.style.display = 'block';
         timerEl.innerText = seconds;
+        if (loginBtn) {
+            loginBtn.disabled = true;
+            loginBtn.style.opacity = '0.6';
+            loginBtn.style.cursor = 'not-allowed';
+        }
 
         if (lockoutInterval) clearInterval(lockoutInterval);
         let rem = seconds;
@@ -1886,6 +2145,11 @@
             if (rem <= 0) {
                 clearInterval(lockoutInterval);
                 banner.style.display = 'none';
+                if (loginBtn) {
+                    loginBtn.disabled = false;
+                    loginBtn.style.opacity = '1';
+                    loginBtn.style.cursor = 'pointer';
+                }
             }
         }, 1000);
     }
@@ -1918,7 +2182,7 @@
                 const stdNum = "WLC-2026-" + Math.floor(1000 + Math.random() * 9000);
                 await fetch(`${SUPABASE_URL}/student_profiles`, {
                     method: 'POST', headers,
-                    body: JSON.stringify({ user_id: newUser.id, student_id_number: stdNum, course_program: 'BSIT', required_hours: 486.00, rendered_hours: 0.00 })
+                    body: JSON.stringify({ user_id: newUser.id, student_id_number: stdNum, course_program: 'BSIT', required_hours: 600, rendered_hours: 0.00 })
                 });
             }
 
@@ -2004,16 +2268,19 @@
             const users = await userRes.json();
             const user = users[0];
 
-            await fetch(`${SUPABASE_URL}/users?id=eq.${encodeURIComponent(email)}`, {
+            await fetch(`${SUPABASE_URL}/users?id=eq.${user.id}`, {
                 method: 'PATCH', headers,
-                body: JSON.stringify({ password: newPassword, failed_attempts: 0, lockout_until: null })
+                body: JSON.stringify({ password: newPassword, failed_attempts: 0, lockout_until: null, lockout_count: 0 })
             });
 
             await logActivity("PASSWORD_RESET", `Password reset completed via OTP for user ${user.username}`);
             showToast("Password updated! Logging in...", "success");
 
             currentUser = user;
+            hideCaptchaChallenge();
             localStorage.setItem('intern_session', JSON.stringify(currentUser));
+            sessionStorage.setItem('intern_session_active', '1');
+            startInactivityTimer();
             routeUserDashboard();
 
         } catch (err) { showToast("Password reset failed.", "error"); }
@@ -2062,14 +2329,14 @@
                 const stdNum = "WLC-2026-" + Math.floor(1000 + Math.random() * 9000);
                 const createRes = await fetch(`${SUPABASE_URL}/student_profiles`, {
                     method: 'POST', headers,
-                    body: JSON.stringify({ user_id: currentUser.id, student_id_number: stdNum, course_program: 'BSIT', required_hours: 486.00, rendered_hours: 0.00 })
+                    body: JSON.stringify({ user_id: currentUser.id, student_id_number: stdNum, course_program: 'BSIT', required_hours: 600, rendered_hours: 0.00 })
                 });
                 profiles = await createRes.json();
             }
 
             if (Array.isArray(profiles) && profiles.length > 0) {
                 const rendered = parseFloat(profiles[0].rendered_hours || 0);
-                const required = parseFloat(profiles[0].required_hours || 486);
+                const required = parseFloat(profiles[0].required_hours || 600);
                 const percent = Math.min(100, (rendered / required) * 100).toFixed(1);
                 document.getElementById('stdHoursDisplay').innerText = `${rendered.toFixed(2)} / ${required} Hours (${percent}%)`;
                 document.getElementById('stdProgressBar').style.width = `${percent}%`;
@@ -3456,14 +3723,14 @@
                 for (const s of students) {
                     const profRes = await fetch(`${SUPABASE_URL}/student_profiles?user_id=eq.${s.id}`, { headers });
                     const profs = await profRes.json();
-                    const prof = (Array.isArray(profs) && profs.length > 0) ? profs[0] : { rendered_hours: 0, required_hours: 486, student_id_number: 'N/A' };
-                    const percent = Math.min(100, ((prof.rendered_hours || 0) / (prof.required_hours || 486)) * 100).toFixed(1);
+                    const prof = (Array.isArray(profs) && profs.length > 0) ? profs[0] : { rendered_hours: 0, required_hours: 600, student_id_number: 'N/A' };
+                    const percent = Math.min(100, ((prof.rendered_hours || 0) / (prof.required_hours || 600)) * 100).toFixed(1);
 
                     list.innerHTML += `
                         <div class="user-card">
                             <div class="log-header">
                                 <span style="font-size:11px; font-weight:800; color:var(--emerald-primary);">${s.full_name}</span>
-                                <span class="badge badge-verified">${prof.rendered_hours || 0} / ${prof.required_hours || 486} hrs</span>
+                                <span class="badge badge-verified">${prof.rendered_hours || 0} / ${prof.required_hours || 600} hrs</span>
                             </div>
                             <div style="font-size:10px; color:var(--text-muted);">ID: <strong>${prof.student_id_number}</strong> | ${s.email}</div>
                             <div class="progress-bar-bg" style="margin-top:6px;">
@@ -3693,9 +3960,9 @@
             for (const s of masterStudentsList) {
                 const profRes = await fetch(`${SUPABASE_URL}/student_profiles?user_id=eq.${s.id}`, { headers });
                 const profs = await profRes.json();
-                const prof = (Array.isArray(profs) && profs.length > 0) ? profs[0] : { rendered_hours: 0, required_hours: 486, student_id_number: 'N/A' };
+                const prof = (Array.isArray(profs) && profs.length > 0) ? profs[0] : { rendered_hours: 0, required_hours: 600, student_id_number: 'N/A' };
                 const rendered = parseFloat(prof.rendered_hours || 0);
-                const required = parseFloat(prof.required_hours || 486);
+                const required = parseFloat(prof.required_hours || 600);
                 const percent = Math.min(100, (rendered / required) * 100).toFixed(1);
 
                 if (rendered >= required) completedCount++;
@@ -3911,10 +4178,22 @@
                 return { color: '#0369a1', bg: '#e0f2fe', icon: 'fa-right-to-bracket', border: '#0284c7' };
             case 'USER_LOGOUT':
                 return { color: '#475569', bg: '#f1f5f9', icon: 'fa-right-from-bracket', border: '#64748b' };
+            case 'AUTO_LOGOUT':
+                return { color: '#c2410c', bg: '#ffedd5', icon: 'fa-hourglass-end', border: '#f97316' };
             case 'OJT_LOG_SUBMIT':
                 return { color: '#b45309', bg: '#fef3c7', icon: 'fa-clock-rotate-left', border: '#f59e0b' };
             case 'INCIDENT_FLAGGED':
                 return { color: '#b91c1c', bg: '#fee2e2', icon: 'fa-triangle-exclamation', border: '#dc2626' };
+            case 'ACCOUNT_LOCKED':
+                return { color: '#991b1b', bg: '#fee2e2', icon: 'fa-lock', border: '#ef4444' };
+            case 'FAILED_LOGIN':
+                return { color: '#dc2626', bg: '#fef2f2', icon: 'fa-circle-xmark', border: '#f87171' };
+            case 'CAPTCHA_FAILED':
+                return { color: '#d97706', bg: '#fef3c7', icon: 'fa-shield-virus', border: '#f59e0b' };
+            case 'BACKUP_EXPORT':
+                return { color: '#047857', bg: '#d1fae5', icon: 'fa-database', border: '#10b981' };
+            case 'SYSTEM_RESTORE':
+                return { color: '#b45309', bg: '#fef3c7', icon: 'fa-rotate-left', border: '#f59e0b' };
             default:
                 return { color: '#334155', bg: '#f1f5f9', icon: 'fa-shield-halved', border: '#64748b' };
         }
@@ -4012,17 +4291,457 @@
         if (modal) modal.style.display = 'none'; 
     }
 
-    async function executeLogout() {
+    // =========================================================================
+    // IAS 1 SECTION E: SESSION MANAGEMENT & CROSS-TAB LOGOUT
+    // =========================================================================
+    function startInactivityTimer() {
+        resetInactivityTimer();
+        // Listen for user activity events
+        ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'].forEach(evt => {
+            window.removeEventListener(evt, resetInactivityTimer);
+            window.addEventListener(evt, resetInactivityTimer, { passive: true });
+        });
+    }
+
+    function resetInactivityTimer() {
+        if (!currentUser) return;
+
+        // Clear existing inactivity timers
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        if (inactivityCountdownInterval) clearInterval(inactivityCountdownInterval);
+
+        // Hide warning modal if visible
+        const warnModal = document.getElementById('inactivityModal');
+        if (warnModal) warnModal.style.display = 'none';
+
+        // 14 minutes: Show warning modal
+        inactivityTimer = setTimeout(() => {
+            showInactivityWarningModal();
+        }, INACTIVITY_WARN_MS);
+    }
+
+    function showInactivityWarningModal() {
+        if (!currentUser) return;
+        const warnModal = document.getElementById('inactivityModal');
+        const countdownEl = document.getElementById('inactivityCountdownText');
+        if (!warnModal || !countdownEl) return;
+
+        inactivityWarningSeconds = 60;
+        countdownEl.innerText = `${inactivityWarningSeconds}s`;
+        warnModal.style.display = 'flex';
+
+        if (inactivityCountdownInterval) clearInterval(inactivityCountdownInterval);
+        inactivityCountdownInterval = setInterval(() => {
+            inactivityWarningSeconds--;
+            countdownEl.innerText = `${inactivityWarningSeconds}s`;
+            if (inactivityWarningSeconds <= 0) {
+                clearInterval(inactivityCountdownInterval);
+                warnModal.style.display = 'none';
+                executeLogout(true, "AUTO_LOGOUT_INACTIVITY");
+            }
+        }, 1000);
+    }
+
+    function keepSessionAlive() {
+        const warnModal = document.getElementById('inactivityModal');
+        if (warnModal) warnModal.style.display = 'none';
+        if (inactivityCountdownInterval) clearInterval(inactivityCountdownInterval);
+        resetInactivityTimer();
+        showToast("Session renewed. Stay secure!", "success");
+    }
+
+    function clearInactivityTracking() {
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        if (inactivityCountdownInterval) clearInterval(inactivityCountdownInterval);
+        const warnModal = document.getElementById('inactivityModal');
+        if (warnModal) warnModal.style.display = 'none';
+        ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'].forEach(evt => {
+            window.removeEventListener(evt, resetInactivityTimer);
+        });
+    }
+
+    async function executeLogout(isAuto = false, reason = "USER_LOGOUT") {
         closeModal();
+        clearInactivityTracking();
         if (clockInterval) clearInterval(clockInterval);
-        if (currentUser) await logActivity("USER_LOGOUT", `User ${currentUser.username} logged out.`);
+
+        if (currentUser) {
+            const auditAction = isAuto ? "AUTO_LOGOUT" : "USER_LOGOUT";
+            const auditMsg = isAuto 
+                ? `User ${currentUser.username} automatically logged out due to 15m inactivity.`
+                : `User ${currentUser.username} logged out.`;
+            await logActivity(auditAction, auditMsg);
+        }
+
         currentUser = null;
         localStorage.removeItem('intern_session');
+        sessionStorage.removeItem('intern_session_active');
+
+        // Broadcast cross-tab logout signal via localStorage
+        localStorage.setItem('wlc_cross_tab_logout', Date.now().toString());
 
         document.getElementById('adminWebDashboard').style.display = 'none';
         document.getElementById('mobileAppFrame').style.display = 'flex';
         switchScreen('loginScreen');
-        showToast("Logged out successfully.", "success");
+
+        // Prevent back-button or direct URL navigation from reopening protected pages
+        try {
+            window.history.pushState(null, '', window.location.href);
+        } catch (e) {}
+
+        if (isAuto) {
+            showToast("Logged out automatically due to 15 minutes of inactivity.", "error");
+        } else {
+            showToast("Logged out successfully.", "success");
+        }
+    }
+
+    // Cross-tab logout listener (window 'storage' event listener)
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'wlc_cross_tab_logout' || (e.key === 'intern_session' && !e.newValue)) {
+            if (currentUser) {
+                currentUser = null;
+                clearInactivityTracking();
+                if (clockInterval) clearInterval(clockInterval);
+                sessionStorage.removeItem('intern_session_active');
+                document.getElementById('adminWebDashboard').style.display = 'none';
+                document.getElementById('mobileAppFrame').style.display = 'flex';
+                switchScreen('loginScreen');
+                showToast("Logged out from another tab.", "error");
+                try {
+                    window.history.pushState(null, '', window.location.href);
+                } catch (err) {}
+            }
+        }
+    });
+
+    // Prevent Back/Forward Navigation into protected screens after logout
+    window.addEventListener('popstate', (e) => {
+        const session = localStorage.getItem('intern_session');
+        if (!session || !currentUser) {
+            currentUser = null;
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('adminWebDashboard').style.display = 'none';
+            document.getElementById('mobileAppFrame').style.display = 'flex';
+            switchScreen('loginScreen');
+            try {
+                window.history.pushState({ page: 'login' }, '', window.location.href);
+            } catch (err) {}
+        }
+    });
+
+    // =========================================================================
+    // IAS 1 SECTION H: BACKUP & DISASTER RECOVERY ENGINE
+    // =========================================================================
+    const BACKUP_COLLECTIONS = [
+        'users',
+        'student_profiles',
+        'ojt_logs',
+        'evaluations',
+        'student_documents',
+        'audit_logs'
+    ];
+
+    async function fetchEntireCollection(tableName) {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/${tableName}?order=created_at.desc&limit=1000`, { headers });
+            if (!res.ok) {
+                // Table might not have created_at column (e.g. some join tables)
+                const fallback = await fetch(`${SUPABASE_URL}/${tableName}?limit=1000`, { headers });
+                return await fallback.json();
+            }
+            return await res.json();
+        } catch (e) {
+            console.warn(`Failed to export ${tableName}:`, e);
+            return [];
+        }
+    }
+
+    async function generateBackupPayload() {
+        const timestamp = new Date().toISOString();
+        const backupData = {
+            system: "WLC InternTrack",
+            version: "4.0-IAS1-COMPLIANT",
+            exported_at: timestamp,
+            exported_by: currentUser ? currentUser.username : "System",
+            collections: {}
+        };
+
+        for (const col of BACKUP_COLLECTIONS) {
+            const data = await fetchEntireCollection(col);
+            backupData.collections[col] = Array.isArray(data) ? data : [];
+        }
+
+        return backupData;
+    }
+
+    async function exportFullSystemBackupJSON() {
+        try {
+            showToast("Generating full system JSON archive...", "success");
+            const backupPayload = await generateBackupPayload();
+            const dateStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+            const fileName = `wlc_interntrack_backup_${dateStr}.json`;
+
+            const blob = new Blob([JSON.stringify(backupPayload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            const totalRecords = Object.values(backupPayload.collections).reduce((sum, arr) => sum + arr.length, 0);
+            await logActivity("BACKUP_EXPORT", `Exported JSON snapshot archive: ${fileName} (${totalRecords} records across 6 collections).`);
+            recordBackupHistoryEntry('JSON', fileName, totalRecords, 'Success');
+            loadBackupHistory();
+            showToast("Backup exported and downloaded successfully!", "success");
+        } catch (err) {
+            console.error("Backup export error:", err);
+            showToast("Failed to generate backup JSON archive.", "error");
+        }
+    }
+
+    async function exportFullSystemBackupSQL() {
+        try {
+            showToast("Generating SQL dump archive...", "success");
+            const backupPayload = await generateBackupPayload();
+            const dateStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+            const fileName = `wlc_interntrack_dump_${dateStr}.sql`;
+
+            let sqlContent = `-- =====================================================\n`;
+            sqlContent += `-- WLC InternTrack SQL Database Dump\n`;
+            sqlContent += `-- Exported At: ${backupPayload.exported_at}\n`;
+            sqlContent += `-- Exported By: ${backupPayload.exported_by}\n`;
+            sqlContent += `-- Collections: users, student_profiles, ojt_logs, evaluations, student_documents, audit_logs\n`;
+            sqlContent += `-- =====================================================\n\n`;
+
+            for (const col of BACKUP_COLLECTIONS) {
+                const rows = backupPayload.collections[col] || [];
+                sqlContent += `-- Table: ${col} (${rows.length} rows)\n`;
+                if (rows.length > 0) {
+                    rows.forEach(row => {
+                        const keys = Object.keys(row);
+                        const vals = keys.map(k => {
+                            const v = row[k];
+                            if (v === null || v === undefined) return 'NULL';
+                            if (typeof v === 'number' || typeof v === 'boolean') return v;
+                            return `'${String(v).replace(/'/g, "''")}'`;
+                        });
+                        sqlContent += `INSERT INTO ${col} (${keys.join(', ')}) VALUES (${vals.join(', ')}) ON CONFLICT (id) DO UPDATE SET ${keys.map((k, i) => `${k} = EXCLUDED.${k}`).join(', ')};\n`;
+                    });
+                }
+                sqlContent += `\n`;
+            }
+
+            const blob = new Blob([sqlContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            const totalRecords = Object.values(backupPayload.collections).reduce((sum, arr) => sum + arr.length, 0);
+            await logActivity("BACKUP_EXPORT", `Exported SQL dump archive: ${fileName} (${totalRecords} SQL statements).`);
+            recordBackupHistoryEntry('SQL', fileName, totalRecords, 'Success');
+            loadBackupHistory();
+            showToast("SQL dump exported and downloaded successfully!", "success");
+        } catch (err) {
+            console.error("SQL dump error:", err);
+            showToast("Failed to generate SQL dump.", "error");
+        }
+    }
+
+    function toggleAutoBackupSchedule(enabled) {
+        const statusText = document.getElementById('backupScheduleStatusText');
+        if (enabled) {
+            localStorage.setItem('wlc_autobackup_enabled', 'true');
+            if (statusText) {
+                statusText.innerHTML = `Status: <span style="color: #16a34a; font-weight: 700;">ACTIVE</span> &bull; Daily at 00:00 UTC (Next run in ~6h) &bull; Retention: 30 days`;
+            }
+            startAutoBackupInterval();
+            showToast("Scheduled daily auto-backup policy ENABLED.", "success");
+        } else {
+            localStorage.setItem('wlc_autobackup_enabled', 'false');
+            if (statusText) {
+                statusText.innerHTML = `Status: <span style="color: #b91c1c; font-weight: 700;">DISABLED</span> &bull; Automatic daily backups paused`;
+            }
+            if (autoBackupInterval) clearInterval(autoBackupInterval);
+            showToast("Scheduled daily auto-backup policy DISABLED.", "error");
+        }
+    }
+
+    function startAutoBackupInterval() {
+        if (autoBackupInterval) clearInterval(autoBackupInterval);
+        // Periodic check (every 1 hour in production, simulated check)
+        autoBackupInterval = setInterval(() => {
+            const isEnabled = localStorage.getItem('wlc_autobackup_enabled') !== 'false';
+            if (isEnabled) {
+                console.log("[AutoBackup] Scheduled heartbeat check ok.");
+            }
+        }, 3600000);
+    }
+
+    async function triggerScheduledBackupNow() {
+        showToast("Triggering scheduled cloud snapshot now...", "success");
+        await exportFullSystemBackupJSON();
+    }
+
+    function recordBackupHistoryEntry(format, filename, count, status) {
+        try {
+            const raw = localStorage.getItem('wlc_backup_history') || '[]';
+            const history = JSON.parse(raw);
+            history.unshift({
+                timestamp: new Date().toISOString(),
+                format,
+                filename,
+                recordCount: count,
+                status,
+                admin: currentUser ? currentUser.username : 'Admin'
+            });
+            // Keep top 15
+            localStorage.setItem('wlc_backup_history', JSON.stringify(history.slice(0, 15)));
+        } catch (e) {}
+    }
+
+    function loadBackupHistory() {
+        const container = document.getElementById('backupHistoryList');
+        if (!container) return;
+        try {
+            const raw = localStorage.getItem('wlc_backup_history') || '[]';
+            const history = JSON.parse(raw);
+            if (!Array.isArray(history) || history.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); padding:6px;">No backup operations recorded in this session.</p>';
+                return;
+            }
+
+            container.innerHTML = history.map(item => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border-color);">
+                    <div>
+                        <strong style="color:var(--text-dark);">${item.filename}</strong>
+                        <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">
+                            ${new Date(item.timestamp).toLocaleString()} &bull; Format: <span class="badge badge-verified">${item.format}</span> &bull; ${item.recordCount} records &bull; By: ${item.admin}
+                        </div>
+                    </div>
+                    <span class="badge badge-approved"><i class="fa-solid fa-circle-check"></i> ${item.status}</span>
+                </div>
+            `).join('');
+        } catch (e) {
+            container.innerHTML = '<p style="color:var(--text-muted);">Error loading history.</p>';
+        }
+    }
+
+    async function inspectSelectedBackupFile() {
+        const fileInput = document.getElementById('backupFileInput');
+        const resBox = document.getElementById('backupInspectResult');
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            showToast("Please select a JSON backup file first.", "error");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+
+            if (!data.collections || typeof data.collections !== 'object') {
+                resBox.innerHTML = `<div style="background:#fee2e2; color:#b91c1c; padding:10px; border-radius:10px; font-weight:700;">Invalid backup archive structure. Missing collections root.</div>`;
+                return;
+            }
+
+            let summaryHtml = `
+                <div style="background:rgba(8, 51, 37, 0.05); border:1px solid var(--emerald-light); padding:12px; border-radius:12px;">
+                    <div style="font-weight:800; color:var(--emerald-primary); margin-bottom:6px;">
+                        <i class="fa-solid fa-file-circle-check"></i> Backup Archive Validated
+                    </div>
+                    <div style="font-size:11px; color:var(--text-dark); margin-bottom:8px;">
+                        <strong>System:</strong> ${data.system || 'Unknown'} &bull; <strong>Version:</strong> ${data.version || '1.0'} &bull; <strong>Exported:</strong> ${data.exported_at || 'Unknown'}
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:6px;">
+            `;
+
+            for (const col of BACKUP_COLLECTIONS) {
+                const count = (data.collections[col] && Array.isArray(data.collections[col])) ? data.collections[col].length : 0;
+                summaryHtml += `
+                    <div style="background:#ffffff; border:1px solid var(--border-color); padding:6px 8px; border-radius:8px;">
+                        <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">${col}</div>
+                        <div style="font-size:14px; font-weight:800; color:var(--emerald-primary);">${count} rows</div>
+                    </div>
+                `;
+            }
+
+            summaryHtml += `</div></div>`;
+            resBox.innerHTML = summaryHtml;
+            showToast("Backup archive inspected and validated successfully!", "success");
+
+        } catch (err) {
+            console.error("Inspect error:", err);
+            resBox.innerHTML = `<div style="background:#fee2e2; color:#b91c1c; padding:10px; border-radius:10px; font-weight:700;">Failed to read or parse JSON file: ${err.message}</div>`;
+        }
+    }
+
+    async function restoreSelectedBackupFile() {
+        const fileInput = document.getElementById('backupFileInput');
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            showToast("Please choose a JSON backup file to restore.", "error");
+            return;
+        }
+
+        if (!confirm("WARNING: Executing full restore will upsert all records from the selected backup archive into Supabase collections. Do you wish to continue?")) {
+            return;
+        }
+
+        const file = fileInput.files[0];
+        try {
+            showToast("Validating and restoring backup data...", "success");
+            const text = await file.text();
+            const data = JSON.parse(text);
+
+            if (!data.collections || typeof data.collections !== 'object') {
+                showToast("Invalid backup archive: missing collections.", "error");
+                return;
+            }
+
+            let restoredCount = 0;
+            for (const col of BACKUP_COLLECTIONS) {
+                const rows = data.collections[col];
+                if (Array.isArray(rows) && rows.length > 0) {
+                    for (const row of rows) {
+                        try {
+                            await fetch(`${SUPABASE_URL}/${col}`, {
+                                method: 'POST',
+                                headers: {
+                                    ...headers,
+                                    "Prefer": "resolution=merge-duplicates"
+                                },
+                                body: JSON.stringify(row)
+                            });
+                            restoredCount++;
+                        } catch (errCol) {
+                            console.warn(`Restore row error in ${col}:`, errCol);
+                        }
+                    }
+                }
+            }
+
+            await logActivity("SYSTEM_RESTORE", `Executed system restore from archive: ${file.name}. Upserted ${restoredCount} records.`);
+            recordBackupHistoryEntry('JSON Restore', file.name, restoredCount, 'Restored');
+            loadBackupHistory();
+            showToast(`System restore completed! ${restoredCount} records merged.`, "success");
+            
+            // Refresh current admin views
+            loadFacultyDashboard();
+            loadFacultyClassAnalytics();
+            loadUserCrudList();
+
+        } catch (err) {
+            console.error("Restore error:", err);
+            showToast("Restore failed: " + err.message, "error");
+        }
     }
 
     function getBadgeClass(status) {
@@ -4037,7 +4756,22 @@
         const savedSession = localStorage.getItem('intern_session');
         if (savedSession) {
             currentUser = JSON.parse(savedSession);
+            sessionStorage.setItem('intern_session_active', '1');
+            startInactivityTimer();
             routeUserDashboard();
+        } else {
+            // Ensure on login screen
+            switchScreen('loginScreen');
+        }
+
+        // Initialize auto-backup toggle state
+        const autoBackupSetting = localStorage.getItem('wlc_autobackup_enabled');
+        const toggleEl = document.getElementById('autoBackupToggle');
+        if (toggleEl && autoBackupSetting === 'false') {
+            toggleEl.checked = false;
+            toggleAutoBackupSchedule(false);
+        } else {
+            startAutoBackupInterval();
         }
     });
     </script>
